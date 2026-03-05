@@ -7,7 +7,7 @@ const CURRENCY_SYMBOL =
   typeof process.env.NEXT_PUBLIC_CURRENCY_SYMBOL === 'string' &&
   process.env.NEXT_PUBLIC_CURRENCY_SYMBOL.trim() !== ''
     ? process.env.NEXT_PUBLIC_CURRENCY_SYMBOL.trim()
-    : '$';
+    : '₸';
 
 export const currencySymbol = CURRENCY_SYMBOL;
 
