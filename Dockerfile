@@ -9,7 +9,9 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN node scripts/generate-products.js 2>/dev/null || true
+# products.json НЕ перезаписываем — используем ваш lib/data/products.json
+ARG NEXT_PUBLIC_CURRENCY_SYMBOL=₸
+ENV NEXT_PUBLIC_CURRENCY_SYMBOL=$NEXT_PUBLIC_CURRENCY_SYMBOL
 RUN npm run build
 
 FROM base AS runner

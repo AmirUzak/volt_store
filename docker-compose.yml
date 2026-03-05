@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_CURRENCY_SYMBOL=${NEXT_PUBLIC_CURRENCY_SYMBOL:-₽}
     environment:
       - NODE_ENV=production
     # Optional: use backend API for products
