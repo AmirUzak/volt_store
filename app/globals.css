@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --volt-bg: #f8fafc;
+  --volt-card: #ffffff;
+  --volt-border: #e2e8f0;
+  --volt-primary: #0ea5e9;
+  --volt-text: #0f172a;
+  --volt-muted: #64748b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --volt-bg: #0f172a;
+    --volt-card: #1e293b;
+    --volt-border: #334155;
+    --volt-text: #f1f5f9;
+    --volt-muted: #94a3b8;
+  }
+}
+
+body {
+  background: var(--volt-bg);
+  color: var(--volt-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+@layer utilities {
+  .transition-smooth {
+    @apply transition-all duration-300 ease-out;
+  }
+}
+
+/* Soft focus ring */
+*:focus-visible {
+  @apply outline-none ring-2 ring-sky-400/50 ring-offset-2 ring-offset-[var(--volt-bg)];
+}
