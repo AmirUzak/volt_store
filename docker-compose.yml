@@ -23,25 +23,28 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     environment:
-      - PORT=4000
-      - DATABASE_URL=postgresql://volt:${DB_PASSWORD:-volt}@db:5432/volt
+      - PORT=${BACKEND_PORT:-4000}
+      - DATABASE_URL=postgresql://${DB_USER:-volt}:${DB_PASSWORD:-volt}@db:5432/${DB_NAME:-volt}
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - volt-network
 
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: volt
+      POSTGRES_USER: ${DB_USER:-volt}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-volt}
-      POSTGRES_DB: volt
+      POSTGRES_DB: ${DB_NAME:-volt}
     ports:
-      - "5432:5432"
+      - "${DB_HOST_PORT:-5433}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U volt"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-volt}"]
       interval: 5s
       timeout: 5s
       retries: 5

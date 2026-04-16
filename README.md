@@ -67,6 +67,40 @@ NEXT_PUBLIC_CURRENCY_SYMBOL=₽
 
 Примеры: `₽` (рубли), `€`, `$`, `Br`, `₴`. Если переменная не задана, используется `$`. Изменения применяются после перезапуска dev-сервера или пересборки.
 
+## Единый .env (копипаст)
+
+Чтобы не ловить рассинхрон между локальной Prisma-миграцией и Docker, используйте один набор переменных в корневом `.env`:
+
+```bash
+DB_USER=volt
+DB_PASSWORD=volt
+DB_NAME=volt
+DB_HOST_PORT=5433
+
+BACKEND_PORT=4000
+JWT_SECRET=change-me-in-production
+FRONTEND_URL=http://localhost
+
+NEXT_PUBLIC_CURRENCY_SYMBOL=₸
+```
+
+Для локальной миграции Prisma в `backend/.env` используйте:
+
+```bash
+DATABASE_URL="postgresql://volt:volt@localhost:5433/volt"
+JWT_SECRET="change-me-in-production"
+NODE_ENV="development"
+PORT=4000
+FRONTEND_URL="http://localhost:3000"
+```
+
+После этого команды миграции:
+
+```bash
+cd backend
+npx prisma migrate dev --name init
+```
+
 ## Запуск локально
 
 1. Установить зависимости и сгенерировать товары:
@@ -103,8 +137,10 @@ npm install && npm run generate-products
 2. Собрать и поднять сервисы:
 
 ```bash
-docker compose up -d --build
+docker compose -p volt up -d --build
 ```
+
+Если используется `.env`, можно задать параметры БД и бэкенда через `.env.example` (например `DB_HOST_PORT=5433`, `DB_PASSWORD`, `JWT_SECRET`).
 
 3. Открыть в браузере: [http://localhost](http://localhost) (порт 80 — nginx).
 3. Nginx проксирует `/` на frontend (Next.js), `/api/` на backend.
@@ -130,7 +166,7 @@ git clone <url> volt-store && cd volt-store
 4. Запустить:
 
 ```bash
-docker compose up -d --build
+docker compose -p volt up -d --build
 ```
 
 Сайт будет доступен на порту 80. Для HTTPS настроить сертификаты (например Let's Encrypt) и обновить конфиг nginx.
