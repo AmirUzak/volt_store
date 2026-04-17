@@ -57,26 +57,26 @@ export default function AdminPage() {
   const [dataLoading, setDataLoading] = useState(false);
 
   const [showForm, setShowForm] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<ProductForm>(emptyForm);
   const [formError, setFormError] = useState('');
   const [formLoading, setFormLoading] = useState(false);
 
-  const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState('');
   const [statusError, setStatusError] = useState('');
-  const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoading) {
-      if (!isLoggedIn || user?.role !== 'admin') {
+      if (!isLoggedIn || user?.role !== 'ADMIN') {
         router.push('/');
       }
     }
   }, [isLoading, isLoggedIn, user, router]);
 
   useEffect(() => {
-    if (!isLoggedIn || user?.role !== 'admin') return;
+    if (!isLoggedIn || user?.role !== 'ADMIN') return;
     setDataLoading(true);
     Promise.all([
       getProducts({ limit: 100 }),
@@ -144,7 +144,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     setDeleteError('');
     try {
       await deleteProduct(id);
@@ -155,7 +155,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleStatusChange = async (orderId: number, status: string) => {
+  const handleStatusChange = async (orderId: string, status: string) => {
     setStatusError('');
     try {
       const updated = await updateOrderStatus(orderId, status);
@@ -173,7 +173,7 @@ export default function AdminPage() {
     );
   }
 
-  if (!user || user.role !== 'admin') return null;
+  if (!user || user.role !== 'ADMIN') return null;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">

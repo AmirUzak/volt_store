@@ -27,7 +27,7 @@ export default function ProfilePage() {
   const [orders, setOrders] = useState<ApiOrder[]>([]);
   const [reviews, setReviews] = useState<ApiReview[]>([]);
   const [tab, setTab] = useState<'orders' | 'reviews'>('orders');
-  const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function ProfilePage() {
             <div>
               <h1 className="text-xl font-bold text-slate-900 dark:text-white">{user.username}</h1>
               <p className="text-sm text-slate-500 dark:text-slate-400">{user.email}</p>
-              {user.role === 'admin' && (
+              {user.role === 'ADMIN' && (
                 <span className="mt-1 inline-block rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-700 dark:bg-sky-900/30 dark:text-sky-400">
                   Администратор
                 </span>

@@ -1,53 +1,60 @@
-import { Request, Response } from 'express';
-import { OrdersService } from '../services/orders.service.js';
+import { Request, Response } from "express";
+import { OrdersService } from "../services/orders.service";
+import { HttpError } from "../utils/httpError";
 
-const ordersService = new OrdersService();
+export class OrdersController {
+  static async create(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
 
-export const getUserOrders = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user!.id;
-    const orders = await ordersService.getUserOrders(userId);
-    res.json(orders);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+      const order = await OrdersService.createOrder(req.user.userId);
+      res.status(201).json(order);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
-};
 
-export const getOrderById = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user!.id;
-    const isAdmin = req.user!.role === 'admin';
-    const orderId = parseInt(req.params.id);
-    if (isNaN(orderId)) return res.status(400).json({ error: 'Invalid order id' });
-    const order = await ordersService.getOrderById(userId, orderId, isAdmin);
-    res.json(order);
-  } catch (error: any) {
-    const status = error.message === 'Order not found' ? 404 : 500;
-    res.status(status).json({ error: error.message });
-  }
-};
+  static async myOrders(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
 
-export const checkout = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user!.id;
-    const order = await ordersService.checkout(userId);
-    res.status(201).json(order);
-  } catch (error: any) {
-    const status = error.message === 'Cart is empty' ? 400 : 500;
-    res.status(status).json({ error: error.message });
+      const orders = await OrdersService.getMyOrders(req.user.userId);
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
-};
 
-export const updateStatus = async (req: Request, res: Response) => {
-  try {
-    const orderId = parseInt(req.params.id);
-    if (isNaN(orderId)) return res.status(400).json({ error: 'Invalid order id' });
-    const { status } = req.body;
-    if (!status) return res.status(400).json({ error: 'status is required' });
-    const order = await ordersService.updateStatus(orderId, status);
-    res.json(order);
-  } catch (error: any) {
-    const status = error.message === 'Order not found' ? 404 : 400;
-    res.status(status).json({ error: error.message });
+  static async allOrders(req: Request, res: Response) {
+    try {
+      const orders = await OrdersService.getAllOrders();
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
-};
+
+  static async updateStatus(req: Request, res: Response) {
+    try {
+      const { status } = req.body;
+      const order = await OrdersService.updateOrderStatus(req.params.id, status);
+      res.status(200).json(order);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+}

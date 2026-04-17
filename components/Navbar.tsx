@@ -48,7 +48,7 @@ export function Navbar() {
               {label}
             </Link>
           ))}
-          {user?.role === 'admin' && (
+          {user?.role === 'ADMIN' && (
             <Link
               href="/admin"
               className="text-sm font-medium text-sky-600 hover:text-sky-700 transition-smooth dark:text-sky-400 dark:hover:text-sky-300"
@@ -129,7 +129,7 @@ export function Navbar() {
               {label}
             </Link>
           ))}
-          {user?.role === 'admin' && (
+          {user?.role === 'ADMIN' && (
             <Link
               href="/admin"
               className="py-3 text-sm font-medium text-sky-600 dark:text-sky-400"

@@ -1,73 +1,100 @@
-import { Request, Response } from 'express';
-import { CartService } from '../services/cart.service.js';
+import { Request, Response } from "express";
+import { CartService } from "../services/cart.service";
+import { HttpError } from "../utils/httpError";
 
-const cartService = new CartService();
+export class CartController {
+  static async getCart(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
 
-export const getCart = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user!.id;
-    const cart = await cartService.getCart(userId);
-    res.json(cart);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const addItem = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user!.id;
-    const { productId, quantity } = req.body;
-    if (!productId || typeof productId !== 'number') {
-      return res.status(400).json({ error: 'productId is required and must be a number' });
+      const cart = await CartService.getCart(req.user.userId);
+      res.status(200).json(cart);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
     }
-    const qty = quantity ?? 1;
-    if (typeof qty !== 'number' || qty < 1) {
-      return res.status(400).json({ error: 'quantity must be a positive number' });
+  }
+
+  static async addToCart(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
+
+      const { productId, quantity } = req.body;
+      const item = await CartService.addToCart(
+        req.user.userId,
+        productId,
+        Number(quantity)
+      );
+      res.status(201).json(item);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal server error" });
     }
-    const item = await cartService.addItem(userId, productId, qty);
-    res.status(201).json(item);
-  } catch (error: any) {
-    const status = error.message === 'Product not found' ? 404 : 400;
-    res.status(status).json({ error: error.message });
   }
-};
 
-export const updateItem = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user!.id;
-    const itemId = parseInt(req.params.id);
-    if (isNaN(itemId)) return res.status(400).json({ error: 'Invalid item id' });
-    const { quantity } = req.body;
-    if (typeof quantity !== 'number' || quantity < 1) {
-      return res.status(400).json({ error: 'quantity must be a positive number' });
+  static async updateQuantity(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
+
+      const { quantity } = req.body;
+      const item = await CartService.updateQuantity(
+        req.user.userId,
+        req.params.productId,
+        Number(quantity)
+      );
+      res.status(200).json(item);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal server error" });
     }
-    const item = await cartService.updateItem(userId, itemId, quantity);
-    res.json(item);
-  } catch (error: any) {
-    const status = error.message === 'Cart item not found' ? 404 : 400;
-    res.status(status).json({ error: error.message });
   }
-};
 
-export const removeItem = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user!.id;
-    const itemId = parseInt(req.params.id);
-    if (isNaN(itemId)) return res.status(400).json({ error: 'Invalid item id' });
-    await cartService.removeItem(userId, itemId);
-    res.json({ message: 'Item removed' });
-  } catch (error: any) {
-    const status = error.message === 'Cart item not found' ? 404 : 500;
-    res.status(status).json({ error: error.message });
-  }
-};
+  static async removeFromCart(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
 
-export const clearCart = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user!.id;
-    await cartService.clearCart(userId);
-    res.json({ message: 'Cart cleared' });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+      const result = await CartService.removeFromCart(
+        req.user.userId,
+        req.params.productId
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
-};
+
+  static async clearCart(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
+
+      const result = await CartService.clearCart(req.user.userId);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+}

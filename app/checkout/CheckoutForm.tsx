@@ -13,7 +13,7 @@ export function CheckoutForm() {
   const { items, totalSum, clear } = useCartStore();
   const { isLoggedIn } = useAuthStore();
   const [submitted, setSubmitted] = useState(false);
-  const [orderId, setOrderId] = useState<number | null>(null);
+  const [orderId, setOrderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();

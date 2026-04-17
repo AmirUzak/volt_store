@@ -1,4 +1,3 @@
-// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,99 +7,76 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  username  String    @unique
-  password  String    // bcrypt хеш
-  role      String    @default("user") // "user" или "admin"
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  orders    Order[]
-  reviews   Review[]
-  carts     Cart[]
-
-  @@map("users")
+  id           String     @id @default(cuid())
+  email        String     @unique
+  username     String     @unique
+  passwordHash String
+  role         Role       @default(USER)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  cartItems    CartItem[]
+  orders       Order[]
 }
 
 model Product {
-  id          Int       @id @default(autoincrement())
+  id          String      @id @default(cuid())
   name        String
-  description String?
+  description String
   price       Float
-  stock       Int       @default(0)
-  image       String?
-  category    String?
-  rating      Float     @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
+  category    String
+  stock       Int         @default(0)
+  imageUrl    String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  cartItems   CartItem[]
   orderItems  OrderItem[]
-  reviews     Review[]
-  carts       CartItem[]
-
-  @@map("products")
-}
-
-model Cart {
-  id        Int       @id @default(autoincrement())
-  userId    Int       @unique
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items     CartItem[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@map("carts")
 }
 
 model CartItem {
-  id        Int       @id @default(autoincrement())
-  cartId    Int
-  cart      Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  productId Int
-  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
   quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@unique([cartId, productId])
-  @@map("cart_items")
+  @@unique([userId, productId])
 }
 
 model Order {
-  id        Int       @id @default(autoincrement())
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  total     Float
-  status    String    @default("pending") // "pending", "completed", "cancelled"
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  items     OrderItem[]
-
-  @@map("orders")
+  id          String      @id @default(cuid())
+  userId      String
+  totalAmount Float
+  status      OrderStatus @default(PENDING)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       OrderItem[]
 }
 
 model OrderItem {
-  id        Int       @id @default(autoincrement())
-  orderId   Int
-  order     Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId Int
-  product   Product   @relation(fields: [productId], references: [id])
-  quantity  Int
-  price     Float     // цена на момент заказа
-
-  @@map("order_items")
-}
-
-model Review {
-  id        Int       @id @default(autoincrement())
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productId Int
-  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  rating    Int       // 1-5
-  comment   String?
-  createdAt DateTime  @default(now())
-
-  @@map("reviews")
+  id           String   @id @default(cuid())
+  orderId      String
+  productId    String
+  quantity     Int
+  priceAtOrder Float
+  createdAt    DateTime @default(now())
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
 }

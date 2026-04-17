@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { authLogin, authLogout, authRegister, getMe, type AuthUser } from '@/lib/api';
+import { authLogout, authRegister, getMe, type AuthUser, authLogin } from '@/lib/api';
+import { useCartStore } from '@/lib/store/cart-store';
 
 interface AuthStore {
   user: AuthUser | null;
@@ -19,16 +20,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
   login: async (email, password) => {
     const user = await authLogin(email, password);
     set({ user, isLoggedIn: true });
+    useCartStore.getState().setActiveUser(user.id);
   },
 
   register: async (email, username, password) => {
-    await authRegister(email, username, password);
-    const user = await authLogin(email, password);
+    const user = await authRegister(email, username, password);
     set({ user, isLoggedIn: true });
+    useCartStore.getState().setActiveUser(user.id);
   },
 
   logout: async () => {
     await authLogout();
+    useCartStore.getState().setActiveUser(null);
     set({ user: null, isLoggedIn: false });
   },
 
@@ -37,6 +40,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       const user = await getMe();
       set({ user, isLoggedIn: !!user });
+      useCartStore.getState().setActiveUser(user?.id ?? null);
     } finally {
       set({ isLoading: false });
     }

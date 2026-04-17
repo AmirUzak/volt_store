@@ -1,78 +1,106 @@
-import { Request, Response } from 'express';
-import { ProductsService } from '../services/products.service.js';
+import { Request, Response } from "express";
+import { ProductsService } from "../services/products.service";
+import { uploadBufferToCloudinary } from "../utils/cloudinary";
+import { HttpError } from "../utils/httpError";
 
-const productsService = new ProductsService();
-
-export const getAllProducts = async (req: Request, res: Response) => {
-  try {
-    const page = Math.max(1, parseInt(req.query.page as string) || 1);
-    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 10));
-    const category = req.query.category as string | undefined;
-    const result = await productsService.getAll(page, limit, category);
-    res.json(result);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const getProductById = async (req: Request, res: Response) => {
-  try {
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ error: 'Invalid product id' });
-    const product = await productsService.getById(id);
-    res.json(product);
-  } catch (error: any) {
-    const status = error.message === 'Product not found' ? 404 : 500;
-    res.status(status).json({ error: error.message });
-  }
-};
-
-export const createProduct = async (req: Request, res: Response) => {
-  try {
-    const { name, description, price, stock, image, category } = req.body;
-    if (!name || price === undefined || price === null) {
-      return res.status(400).json({ error: 'name and price are required' });
+export class ProductsController {
+  static async getAll(req: Request, res: Response) {
+    try {
+      const { category, search, sort } = req.query;
+      const products = await ProductsService.getAll({
+        category: category as string,
+        search: search as string,
+        sort: sort as string
+      });
+      res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
     }
-    if (typeof price !== 'number' || price < 0) {
-      return res.status(400).json({ error: 'price must be a non-negative number' });
-    }
-    if (stock !== undefined && (typeof stock !== 'number' || stock < 0)) {
-      return res.status(400).json({ error: 'stock must be a non-negative number' });
-    }
-    const product = await productsService.create({ name, description, price, stock: stock ?? 0, image, category });
-    res.status(201).json(product);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
   }
-};
 
-export const updateProduct = async (req: Request, res: Response) => {
-  try {
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ error: 'Invalid product id' });
-    const { name, description, price, stock, image, category } = req.body;
-    if (price !== undefined && (typeof price !== 'number' || price < 0)) {
-      return res.status(400).json({ error: 'price must be a non-negative number' });
+  static async getById(req: Request, res: Response) {
+    try {
+      const product = await ProductsService.getById(req.params.id);
+      res.status(200).json(product);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal server error" });
     }
-    if (stock !== undefined && (typeof stock !== 'number' || stock < 0)) {
-      return res.status(400).json({ error: 'stock must be a non-negative number' });
-    }
-    const product = await productsService.update(id, { name, description, price, stock, image, category });
-    res.json(product);
-  } catch (error: any) {
-    const status = error.message === 'Product not found' ? 404 : 500;
-    res.status(status).json({ error: error.message });
   }
-};
 
-export const deleteProduct = async (req: Request, res: Response) => {
-  try {
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ error: 'Invalid product id' });
-    await productsService.delete(id);
-    res.json({ message: 'Product deleted' });
-  } catch (error: any) {
-    const status = error.message === 'Product not found' ? 404 : 500;
-    res.status(status).json({ error: error.message });
+  static async create(req: Request, res: Response) {
+    try {
+      const { name, description, price, category, stock, imageUrl: imageUrlFromBody } = req.body;
+      let imageUrl: string | undefined;
+
+      if (req.file?.buffer) {
+        imageUrl = await uploadBufferToCloudinary(req.file.buffer);
+      } else if (typeof imageUrlFromBody === "string" && imageUrlFromBody.trim()) {
+        imageUrl = imageUrlFromBody.trim();
+      }
+
+      const product = await ProductsService.create({
+        name,
+        description,
+        price: Number(price),
+        category,
+        stock: Number(stock),
+        imageUrl
+      });
+
+      res.status(201).json(product);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
-};
+
+  static async update(req: Request, res: Response) {
+    try {
+      const { name, description, price, category, stock, imageUrl: imageUrlFromBody } = req.body;
+      let imageUrl: string | undefined;
+
+      if (req.file?.buffer) {
+        imageUrl = await uploadBufferToCloudinary(req.file.buffer);
+      } else if (typeof imageUrlFromBody === "string" && imageUrlFromBody.trim()) {
+        imageUrl = imageUrlFromBody.trim();
+      }
+
+      const product = await ProductsService.update(req.params.id, {
+        name,
+        description,
+        category,
+        imageUrl,
+        ...(price !== undefined ? { price: Number(price) } : {}),
+        ...(stock !== undefined ? { stock: Number(stock) } : {})
+      });
+
+      res.status(200).json(product);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  static async remove(req: Request, res: Response) {
+    try {
+      const result = await ProductsService.remove(req.params.id);
+      res.status(200).json(result);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+}

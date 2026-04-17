@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const protectedRoutes = ['/profile', '/checkout'];
 const adminRoutes = ['/admin'];
+const BACKEND_BASE = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000').replace(/\/$/, '');
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -15,7 +16,7 @@ export async function middleware(request: NextRequest) {
   const cookieHeader = request.headers.get('cookie') || '';
 
   try {
-    const res = await fetch(new URL('/api/auth/me', request.url), {
+    const res = await fetch(`${BACKEND_BASE}/api/v1/auth/me`, {
       headers: { cookie: cookieHeader },
       credentials: 'include',
     });
@@ -29,7 +30,7 @@ export async function middleware(request: NextRequest) {
 
     if (isAdmin) {
       const user = await res.json();
-      if (user?.role !== 'admin') {
+      if (user?.role !== 'ADMIN') {
         return NextResponse.redirect(new URL('/', request.url));
       }
     }
