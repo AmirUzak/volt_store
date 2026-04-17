@@ -1,6 +1,15 @@
 import { prisma } from "../utils/prisma";
 import { HttpError } from "../utils/httpError";
 
+type CartProductInput = {
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stock: number;
+  imageUrl?: string | null;
+};
+
 export class CartService {
   static async getCart(userId: string) {
     return prisma.cartItem.findMany({
@@ -10,7 +19,12 @@ export class CartService {
     });
   }
 
-  static async addToCart(userId: string, productId: string, quantity: number) {
+  static async addToCart(
+    userId: string,
+    productId: string,
+    quantity: number,
+    productData?: CartProductInput
+  ) {
     if (!productId || !quantity) {
       throw new HttpError(400, "productId and quantity are required");
     }
@@ -19,7 +33,31 @@ export class CartService {
       throw new HttpError(400, "quantity must be greater than 0");
     }
 
-    const product = await prisma.product.findUnique({ where: { id: productId } });
+    let product = await prisma.product.findUnique({ where: { id: productId } });
+
+    if (!product && productData) {
+      product = await prisma.product.upsert({
+        where: { id: productId },
+        update: {
+          name: productData.name,
+          description: productData.description,
+          price: productData.price,
+          category: productData.category,
+          stock: productData.stock,
+          imageUrl: productData.imageUrl ?? null,
+        },
+        create: {
+          id: productId,
+          name: productData.name,
+          description: productData.description,
+          price: productData.price,
+          category: productData.category,
+          stock: productData.stock,
+          imageUrl: productData.imageUrl ?? null,
+        },
+      });
+    }
+
     if (!product) {
       throw new HttpError(404, "Product not found");
     }

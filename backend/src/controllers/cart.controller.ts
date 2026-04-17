@@ -24,11 +24,12 @@ export class CartController {
         return;
       }
 
-      const { productId, quantity } = req.body;
+      const { productId, quantity, product } = req.body;
       const item = await CartService.addToCart(
         req.user.userId,
         productId,
-        Number(quantity)
+        Number(quantity),
+        product
       );
       res.status(201).json(item);
     } catch (error) {

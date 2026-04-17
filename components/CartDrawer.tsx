@@ -81,7 +81,7 @@ export function CartDrawer() {
                       <div className="mt-1 flex items-center gap-1">
                         <button
                           type="button"
-                          onClick={() => setQuantity(product.id, quantity - 1)}
+                          onClick={() => { void setQuantity(product.id, quantity - 1); }}
                           className="rounded bg-slate-200 p-1 hover:bg-slate-300 dark:bg-slate-600 dark:hover:bg-slate-500"
                           aria-label="Уменьшить"
                         >
@@ -90,7 +90,7 @@ export function CartDrawer() {
                         <span className="min-w-[1.5rem] text-center text-sm">{quantity}</span>
                         <button
                           type="button"
-                          onClick={() => setQuantity(product.id, quantity + 1)}
+                          onClick={() => { void setQuantity(product.id, quantity + 1); }}
                           className="rounded bg-slate-200 p-1 hover:bg-slate-300 dark:bg-slate-600 dark:hover:bg-slate-500"
                           aria-label="Увеличить"
                         >
@@ -98,7 +98,7 @@ export function CartDrawer() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => remove(product.id)}
+                          onClick={() => { void remove(product.id); }}
                           className="ml-2 text-xs text-red-600 hover:underline dark:text-red-400"
                         >
                           Удалить

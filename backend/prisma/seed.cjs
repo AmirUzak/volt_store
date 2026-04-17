@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const path = require('path');
 const { PrismaClient, Role } = require('@prisma/client');
 
 const prisma = new PrismaClient();
@@ -7,57 +8,7 @@ const SALT_ROUNDS = 10;
 const DEFAULT_ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@volt.local';
 const DEFAULT_ADMIN_USERNAME = process.env.SEED_ADMIN_USERNAME || 'admin';
 const DEFAULT_ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD || 'Admin123!';
-
-const seedProducts = [
-  {
-    name: 'AeroBook 14',
-    description: 'Slim 14-inch ultrabook for daily work and study.',
-    price: 499990,
-    category: 'laptops',
-    stock: 12,
-    imageUrl: 'https://images.unsplash.com/photo-1517336714739-489689fd1ca8?w=1200'
-  },
-  {
-    name: 'VOLTPhone X',
-    description: 'Flagship smartphone with OLED display and fast charging.',
-    price: 389990,
-    category: 'smartphones',
-    stock: 20,
-    imageUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1200'
-  },
-  {
-    name: 'Pulse Buds Pro',
-    description: 'Wireless earbuds with ANC and transparent mode.',
-    price: 69990,
-    category: 'audio',
-    stock: 30,
-    imageUrl: 'https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?w=1200'
-  },
-  {
-    name: 'Titan 27 2K',
-    description: '27-inch 2K IPS monitor with 165Hz refresh rate.',
-    price: 159990,
-    category: 'monitors',
-    stock: 15,
-    imageUrl: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=1200'
-  },
-  {
-    name: 'SparkPad 11',
-    description: 'Lightweight tablet with stylus support.',
-    price: 229990,
-    category: 'tablets',
-    stock: 18,
-    imageUrl: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?w=1200'
-  },
-  {
-    name: 'Nova Watch S',
-    description: 'Smartwatch with health tracking and GPS.',
-    price: 89990,
-    category: 'wearables',
-    stock: 22,
-    imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1200'
-  }
-];
+const seedProducts = require(path.join(__dirname, 'seed-products.json'));
 
 async function seedAdmin() {
   const passwordHash = await bcrypt.hash(DEFAULT_ADMIN_PASSWORD, SALT_ROUNDS);
@@ -88,26 +39,31 @@ async function seedAdmin() {
 
 async function seedCatalog() {
   for (const product of seedProducts) {
-    const existing = await prisma.product.findFirst({
-      where: { name: product.name },
+    const productData = {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      category: product.category,
+      stock: product.inStock ? 10 : 0,
+      imageUrl: product.image,
+    };
+
+    const existing = await prisma.product.findUnique({
+      where: { id: productData.id },
       select: { id: true }
     });
 
     if (existing) {
+      const { id, ...updateData } = productData;
       await prisma.product.update({
         where: { id: existing.id },
-        data: {
-          description: product.description,
-          price: product.price,
-          category: product.category,
-          stock: product.stock,
-          imageUrl: product.imageUrl
-        }
+        data: updateData
       });
       continue;
     }
 
-    await prisma.product.create({ data: product });
+    await prisma.product.create({ data: productData });
   }
 }
 

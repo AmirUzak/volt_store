@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const protectedRoutes = ['/profile', '/checkout'];
 const adminRoutes = ['/admin'];
-const BACKEND_BASE = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000').replace(/\/$/, '');
+const BACKEND_BASE = (
+  process.env.INTERNAL_API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  'http://localhost:4000'
+).replace(/\/$/, '');
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

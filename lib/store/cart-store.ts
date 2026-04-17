@@ -1,5 +1,15 @@
 import { create } from 'zustand';
+import { getProducts } from '@/lib/products';
 import type { Product } from '@/lib/types';
+import {
+  addToCart as apiAddToCart,
+  clearCart as apiClearCart,
+  getCart as apiGetCart,
+  removeFromCart as apiRemoveFromCart,
+  updateCartItem as apiUpdateCartItem,
+  type ApiCart,
+  type CartProductPayload,
+} from '@/lib/api';
 
 export interface CartItem {
   product: Product;
@@ -38,15 +48,53 @@ const saveUserCart = (userId: string, items: CartItem[]) => {
   writeCartStorage(storage);
 };
 
+const toCartProductPayload = (product: Product): CartProductPayload => ({
+  name: product.name,
+  description: product.description,
+  price: product.price,
+  category: product.category,
+  stock: product.inStock ? 1 : 0,
+  imageUrl: product.image,
+});
+
+const mapRemoteCart = (cart: ApiCart): CartItem[] => {
+  const catalog = getProducts();
+
+  return cart.items
+    .map(({ product, quantity }) => {
+      const localProduct = catalog.find((entry) => entry.id === product.id);
+
+      if (!localProduct) {
+        return null;
+      }
+
+      return {
+        product: localProduct,
+        quantity,
+      };
+    })
+    .filter((item): item is CartItem => item !== null);
+};
+
+const syncItemsToBackend = async (items: CartItem[]) => {
+  await apiClearCart();
+
+  for (const item of items) {
+    await apiAddToCart(item.product.id, item.quantity, toCartProductPayload(item.product));
+  }
+
+  return apiGetCart();
+};
+
 interface CartStore {
   items: CartItem[];
   isOpen: boolean;
   activeUserId: string | null;
-  add: (product: Product, quantity?: number) => void;
-  remove: (productId: string) => void;
-  setQuantity: (productId: string, quantity: number) => void;
-  clear: () => void;
-  setActiveUser: (userId: string | null) => void;
+  add: (product: Product, quantity?: number) => Promise<void>;
+  remove: (productId: string) => Promise<void>;
+  setQuantity: (productId: string, quantity: number) => Promise<void>;
+  clear: () => Promise<void>;
+  setActiveUser: (userId: string | null) => Promise<void>;
   open: () => void;
   close: () => void;
   toggle: () => void;
@@ -58,74 +106,119 @@ export const useCartStore = create<CartStore>((set, get) => ({
   items: [],
   isOpen: false,
   activeUserId: null,
-  add: (product, quantity = 1) => {
-    set((state) => {
-      const existing = state.items.find((i) => i.product.id === product.id);
-      let next: CartItem[];
-      if (existing) {
-        next = state.items.map((i) =>
-          i.product.id === product.id
-            ? { ...i, quantity: i.quantity + quantity }
-            : i
-        );
-      } else {
-        next = [...state.items, { product, quantity }];
-      }
-      if (state.activeUserId) {
-        saveUserCart(state.activeUserId, next);
-      }
-      return { items: next };
-    });
-  },
-  remove: (productId) => {
-    set((state) => ({
-      items: (() => {
-        const next = state.items.filter((i) => i.product.id !== productId);
-        if (state.activeUserId) {
-          saveUserCart(state.activeUserId, next);
-        }
-        return next;
-      })(),
-    }));
-  },
-  setQuantity: (productId, quantity) => {
-    if (quantity < 1) {
-      get().remove(productId);
+  add: async (product, quantity = 1) => {
+    const state = get();
+
+    if (!state.activeUserId) {
+      set((current) => {
+        const existing = current.items.find((item) => item.product.id === product.id);
+        const next = existing
+          ? current.items.map((item) =>
+              item.product.id === product.id
+                ? { ...item, quantity: item.quantity + quantity }
+                : item
+            )
+          : [...current.items, { product, quantity }];
+
+        return { items: next };
+      });
       return;
     }
-    set((state) => ({
-      items: (() => {
-        const next = state.items.map((i) =>
-          i.product.id === productId ? { ...i, quantity } : i
-        );
-        if (state.activeUserId) {
-          saveUserCart(state.activeUserId, next);
-        }
-        return next;
-      })(),
-    }));
+
+    const remoteCart = await apiAddToCart(product.id, quantity);
+    const next = mapRemoteCart(remoteCart);
+    set({ items: next });
+    saveUserCart(state.activeUserId, next);
+  },
+  remove: async (productId) => {
+    const state = get();
+
+    if (!state.activeUserId) {
+      set((current) => ({
+        items: current.items.filter((item) => item.product.id !== productId),
+      }));
+      return;
+    }
+
+    const remoteCart = await apiRemoveFromCart(productId);
+    const next = mapRemoteCart(remoteCart);
+    set({ items: next });
+    saveUserCart(state.activeUserId, next);
+  },
+  setQuantity: async (productId, quantity) => {
+    const state = get();
+
+    if (quantity < 1) {
+      await get().remove(productId);
+      return;
+    }
+
+    if (!state.activeUserId) {
+      set((current) => ({
+        items: current.items.map((item) =>
+          item.product.id === productId ? { ...item, quantity } : item
+        ),
+      }));
+      return;
+    }
+
+    const remoteCart = await apiUpdateCartItem(productId, quantity);
+    const next = mapRemoteCart(remoteCart);
+    set({ items: next });
+    saveUserCart(state.activeUserId, next);
   },
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
   toggle: () => set((s) => ({ isOpen: !s.isOpen })),
-  clear: () => {
-    set((state) => {
-      if (state.activeUserId) {
-        saveUserCart(state.activeUserId, []);
-      }
-      return { items: [] };
-    });
+  clear: async () => {
+    const state = get();
+
+    if (!state.activeUserId) {
+      set({ items: [] });
+      return;
+    }
+
+    await apiClearCart();
+    set({ items: [] });
+    saveUserCart(state.activeUserId, []);
   },
-  setActiveUser: (userId) => {
+  setActiveUser: async (userId) => {
     if (!userId) {
       set({ activeUserId: null, items: [] });
       return;
     }
 
-    set({
-      activeUserId: userId,
-      items: loadUserCart(userId),
-    });
+    const currentItems = get().items;
+    const savedItems = loadUserCart(userId);
+
+    set({ activeUserId: userId });
+
+    try {
+      const remoteCart = await apiGetCart();
+
+      if (remoteCart.items.length > 0) {
+        const next = mapRemoteCart(remoteCart);
+        set({ items: next });
+        saveUserCart(userId, next);
+        return;
+      }
+
+      const fallbackItems = currentItems.length > 0 ? currentItems : savedItems;
+      if (fallbackItems.length > 0) {
+        const syncedCart = await syncItemsToBackend(fallbackItems);
+        const next = mapRemoteCart(syncedCart);
+        set({ items: next });
+        saveUserCart(userId, next);
+        return;
+      }
+
+      set({ items: [] });
+      saveUserCart(userId, []);
+    } catch {
+      const fallbackItems = currentItems.length > 0 ? currentItems : savedItems;
+      set({ items: fallbackItems });
+      saveUserCart(userId, fallbackItems);
+    }
   },
   totalSum: () =>
     get().items.reduce((sum, i) => sum + i.product.price * i.quantity, 0),

@@ -32,7 +32,7 @@ export function CheckoutForm() {
       const order = await apiCheckout();
       setOrderId(order.id);
       setSubmitted(true);
-      clear();
+      void clear();
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message);

@@ -227,6 +227,15 @@ type BackendCartItem = {
   product: BackendProduct;
 };
 
+export interface CartProductPayload {
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stock: number;
+  imageUrl: string | null;
+}
+
 const mapCartItem = (item: BackendCartItem): ApiCartItem => ({
   id: item.id,
   productId: item.productId,
@@ -239,10 +248,14 @@ export async function getCart(): Promise<ApiCart> {
   return { items: items.map(mapCartItem) };
 }
 
-export async function addToCart(productId: string, quantity = 1): Promise<ApiCart> {
+export async function addToCart(
+  productId: string,
+  quantity = 1,
+  product?: CartProductPayload,
+): Promise<ApiCart> {
   await request('/cart', {
     method: 'POST',
-    body: JSON.stringify({ productId, quantity }),
+    body: JSON.stringify({ productId, quantity, product }),
   });
   return getCart();
 }

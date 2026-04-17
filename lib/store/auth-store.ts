@@ -20,18 +20,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
   login: async (email, password) => {
     const user = await authLogin(email, password);
     set({ user, isLoggedIn: true });
-    useCartStore.getState().setActiveUser(user.id);
+    await useCartStore.getState().setActiveUser(user.id);
   },
 
   register: async (email, username, password) => {
     const user = await authRegister(email, username, password);
     set({ user, isLoggedIn: true });
-    useCartStore.getState().setActiveUser(user.id);
+    await useCartStore.getState().setActiveUser(user.id);
   },
 
   logout: async () => {
     await authLogout();
-    useCartStore.getState().setActiveUser(null);
+    await useCartStore.getState().setActiveUser(null);
     set({ user: null, isLoggedIn: false });
   },
 
@@ -40,7 +40,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       const user = await getMe();
       set({ user, isLoggedIn: !!user });
-      useCartStore.getState().setActiveUser(user?.id ?? null);
+      await useCartStore.getState().setActiveUser(user?.id ?? null);
     } finally {
       set({ isLoading: false });
     }

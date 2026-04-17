@@ -55,7 +55,7 @@ export function CartContent() {
               <div className="flex items-center rounded-lg border border-slate-200 dark:border-slate-600">
                 <button
                   type="button"
-                  onClick={() => setQuantity(product.id, quantity - 1)}
+                  onClick={() => { void setQuantity(product.id, quantity - 1); }}
                   className="rounded-l-lg p-2 hover:bg-slate-100 dark:hover:bg-slate-700"
                   aria-label="Уменьшить"
                 >
@@ -64,7 +64,7 @@ export function CartContent() {
                 <span className="min-w-[2.5rem] text-center font-medium">{quantity}</span>
                 <button
                   type="button"
-                  onClick={() => setQuantity(product.id, quantity + 1)}
+                  onClick={() => { void setQuantity(product.id, quantity + 1); }}
                   className="rounded-r-lg p-2 hover:bg-slate-100 dark:hover:bg-slate-700"
                   aria-label="Увеличить"
                 >
@@ -74,7 +74,7 @@ export function CartContent() {
               <p className="w-20 text-right font-semibold">${product.price * quantity}</p>
               <button
                 type="button"
-                onClick={() => remove(product.id)}
+                onClick={() => { void remove(product.id); }}
                 className="rounded-lg p-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
                 aria-label="Удалить"
               >

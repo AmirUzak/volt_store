@@ -107,7 +107,7 @@ export function ProductCard({ product, priority }: ProductCardProps) {
         type="button"
         onClick={(e) => {
           e.preventDefault();
-          add(product);
+          void add(product);
         }}
         className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-sky-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-sky-600 transition-colors duration-200"
       >
