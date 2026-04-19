@@ -1,9 +1,11 @@
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import { prisma } from "../utils/prisma";
 import { signToken } from "../utils/jwt";
 import { HttpError } from "../utils/httpError";
 
 const SALT_ROUNDS = 10;
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
 const ALLOWED_PAYMENT_METHODS = ["card", "cash", "sbp", "paypal"] as const;
 
 type ProfileUpdateInput = {
@@ -171,5 +173,87 @@ export class AuthService {
     });
 
     return user;
+  }
+
+  static async requestPasswordReset(email: string) {
+    if (!email || typeof email !== "string") {
+      throw new HttpError(400, "email is required");
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const user = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+      select: {
+        id: true,
+        email: true,
+        username: true
+      }
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+    const expiresAt = new Date(Date.now() + RESET_TOKEN_TTL_MS);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetPasswordTokenHash: tokenHash,
+        resetPasswordExpiresAt: expiresAt
+      }
+    });
+
+    return {
+      email: user.email,
+      username: user.username,
+      token
+    };
+  }
+
+  static async resetPassword(token: string, newPassword: string) {
+    if (!token || typeof token !== "string") {
+      throw new HttpError(400, "token is required");
+    }
+
+    if (!newPassword || typeof newPassword !== "string") {
+      throw new HttpError(400, "newPassword is required");
+    }
+
+    const normalizedPassword = newPassword.trim();
+    if (normalizedPassword.length < 8) {
+      throw new HttpError(400, "Password must be at least 8 characters long");
+    }
+
+    const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+    const user = await prisma.user.findFirst({
+      where: {
+        resetPasswordTokenHash: tokenHash,
+        resetPasswordExpiresAt: {
+          gt: new Date()
+        }
+      },
+      select: {
+        id: true
+      }
+    });
+
+    if (!user) {
+      throw new HttpError(400, "Invalid or expired reset token");
+    }
+
+    const passwordHash = await bcrypt.hash(normalizedPassword, SALT_ROUNDS);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash,
+        resetPasswordTokenHash: null,
+        resetPasswordExpiresAt: null
+      }
+    });
   }
 }

@@ -3,7 +3,7 @@ import './globals.css';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { CartDrawer } from '@/components/CartDrawer';
-import { Assistant } from '@/components/Assistant';
+import { ChatWidget } from '@/components/ChatWidget';
 import { AuthProvider } from '@/components/AuthProvider';
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <CartDrawer />
-          <Assistant />
+          <ChatWidget />
         </AuthProvider>
       </body>
     </html>

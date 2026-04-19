@@ -1,0 +1,88 @@
+VOLT EMAIL TEMPLATES - MULTILANGUAGE BASE
+Version: 1
+
+How to use:
+1) Keep keys unchanged (WELCOME_SUBJECT, etc.).
+2) Translate values to any language.
+3) Keep placeholders exactly as-is: {{username}}, {{orderId}}, {{totalAmount}}, {{changedFields}}, {{appUrl}}, {{itemsList}}.
+4) You can keep multiple languages in one email by filling EN + RU + KZ blocks.
+
+========================================
+TEMPLATE: WELCOME
+========================================
+WELCOME_SUBJECT_EN=Welcome to VOLT Store
+WELCOME_SUBJECT_RU=Dobro pozhalovat v VOLT Store
+WELCOME_SUBJECT_KZ=VOLT Store-ge khosh keldiniz
+
+WELCOME_TEXT_EN=Welcome, {{username}}! Thanks for registering at VOLT Store. Your account is ready. Open profile: {{appUrl}}/profile
+WELCOME_TEXT_RU=Privet, {{username}}! Spasibo za registratsiyu v VOLT Store. Vash akkaunt gotov. Otkryt profil: {{appUrl}}/profile
+WELCOME_TEXT_KZ=Salem, {{username}}! VOLT Store-de tirkelgeniniz ushin rahmet. Profil: {{appUrl}}/profile
+
+WELCOME_HTML_EN_TITLE=Welcome, {{username}}!
+WELCOME_HTML_EN_BODY=Thanks for registering at VOLT Store. Your account is ready.
+WELCOME_HTML_RU_TITLE=Privet, {{username}}!
+WELCOME_HTML_RU_BODY=Spasibo za registratsiyu v VOLT Store. Vash akkaunt gotov.
+WELCOME_HTML_KZ_TITLE=Salem, {{username}}!
+WELCOME_HTML_KZ_BODY=VOLT Store-de tirkelgeniniz ushin rahmet.
+
+========================================
+TEMPLATE: PROFILE UPDATED
+========================================
+PROFILE_UPDATED_SUBJECT_EN=Your VOLT profile was updated
+PROFILE_UPDATED_SUBJECT_RU=Profil VOLT obnovlen
+PROFILE_UPDATED_SUBJECT_KZ=VOLT profiliniz zhanartyldy
+
+PROFILE_UPDATED_TEXT_EN=Hi, {{username}}. We detected profile changes: {{changedFields}}. Review profile: {{appUrl}}/profile
+PROFILE_UPDATED_TEXT_RU=Privet, {{username}}. My zafiksirovali izmeneniya v profile: {{changedFields}}. Proverit profil: {{appUrl}}/profile
+PROFILE_UPDATED_TEXT_KZ=Salem, {{username}}. Profil ozgeristeri: {{changedFields}}. Tekseru: {{appUrl}}/profile
+
+========================================
+TEMPLATE: ORDER CREATED
+========================================
+ORDER_CREATED_SUBJECT_EN=Order confirmed
+ORDER_CREATED_SUBJECT_RU=Zakaz podtverzhden
+ORDER_CREATED_SUBJECT_KZ=Taprys rastaldy
+
+ORDER_CREATED_TEXT_EN=Hi, {{username}}. Your order {{orderId}} is confirmed. Total: {{totalAmount}}. Items: {{itemsList}}
+ORDER_CREATED_TEXT_RU=Privet, {{username}}. Vash zakaz {{orderId}} podtverzhden. Summa: {{totalAmount}}. Tovary: {{itemsList}}
+ORDER_CREATED_TEXT_KZ=Salem, {{username}}. {{orderId}} tapsrys rastaldy. Somasy: {{totalAmount}}. Tauarlar: {{itemsList}}
+
+========================================
+TEMPLATE: ORDER STATUS UPDATED
+========================================
+ORDER_STATUS_SUBJECT_EN=Order status updated
+ORDER_STATUS_SUBJECT_RU=Status zakaza obnovlen
+ORDER_STATUS_SUBJECT_KZ=Tapsrys statusy zhanartyldy
+
+ORDER_STATUS_TEXT_EN=Hi, {{username}}. Your order {{orderId}} status is now {{status}}.
+ORDER_STATUS_TEXT_RU=Privet, {{username}}. Status vashego zakaza {{orderId}} teper: {{status}}.
+ORDER_STATUS_TEXT_KZ=Salem, {{username}}. {{orderId}} taprysysynyn statusy: {{status}}.
+
+========================================
+STATUS TRANSLATION SUGGESTION
+========================================
+STATUS_PENDING_EN=Pending
+STATUS_PENDING_RU=V obrabotke
+STATUS_PENDING_KZ=Kutilude
+
+STATUS_PAID_EN=Paid
+STATUS_PAID_RU=Oplachen
+STATUS_PAID_KZ=Tolem aldy
+
+STATUS_SHIPPED_EN=Shipped
+STATUS_SHIPPED_RU=Otpravlen
+STATUS_SHIPPED_KZ=Zhiberildi
+
+STATUS_DELIVERED_EN=Delivered
+STATUS_DELIVERED_RU=Dostavlen
+STATUS_DELIVERED_KZ=Zhetkizildi
+
+STATUS_CANCELLED_EN=Cancelled
+STATUS_CANCELLED_RU=Otmenen
+STATUS_CANCELLED_KZ=Kushin zhoıyldy
+
+========================================
+NOTES
+========================================
+- If you later want single-language sending based on user preference, add user.preferredLanguage and choose only one language block before send.
+- If you keep multi-language emails, keep EN first, then RU/KZ for readability.

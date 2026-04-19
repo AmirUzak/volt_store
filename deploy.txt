@@ -1,0 +1,61 @@
+Шаг 2 — Создать Droplet
+
+Dashboard → Create → Droplets
+Выбери:
+
+Region: Frankfurt или Amsterdam (ближе к Казахстану из доступных)
+OS: Ubuntu 24.04 LTS
+Plan: Basic → Regular → $6/месяц (1GB RAM, 1 CPU, 25GB SSD) — достаточно для проекта
+Authentication: SSH Key (рекомендую) или Password
+
+
+Hostname: volt-store
+Нажми Create Droplet
+
+
+Шаг 3 — Настроить SSH ключ (если выбрал SSH)
+На своём Windows:
+powershellssh-keygen -t ed25519 -C "volt-store"
+# нажимай Enter на всех вопросах
+cat ~/.ssh/id_ed25519.pub
+# скопируй вывод → вставь в DigitalOcean при создании Droplet
+
+Шаг 4 — Подключиться к серверу
+powershellssh root@IP_ТВОЕГО_DROPLET
+
+Шаг 5 — Установить Docker на сервере
+bashapt update && apt upgrade -y
+apt install -y docker.io docker-compose-plugin
+systemctl enable docker
+systemctl start docker
+
+# проверка
+docker --version
+docker compose version
+
+Шаг 6 — Задеплоить проект
+bashgit clone https://github.com/AmirUzak/volt_store
+cd volt_store
+cp .env.example .env
+nano .env  # заполнить реальными значениями
+Заполни .env:
+DATABASE_URL=postgresql://volt_app:ВАШ_ПАРОЛЬ@postgres:5432/volt_db
+JWT_SECRET=какой_то_длинный_секрет_минимум_32_символа
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxx
+GEMINI_API_KEY=ваш_ключ
+NEXT_PUBLIC_API_URL=https://voltstore.app
+Потом:
+bashdocker compose up -d --build
+
+Шаг 7 — Прописать DNS на name.com
+Зайди на name.com → Manage DNS для voltstore.app:
+
+TYPE: A, HOST: пусто, ANSWER: IP твоего Droplet
+TYPE: A, HOST: www, ANSWER: тот же IP
+
+Ждёшь 10-30 минут.
+
+Шаг 8 — SSL сертификат
+После того как DNS обновился:
+bashchmod +x setup-ssl.sh
+./setup-ssl.sh

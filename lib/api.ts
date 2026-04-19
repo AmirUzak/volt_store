@@ -95,6 +95,22 @@ export async function authLogout(): Promise<void> {
   await request('/auth/logout', { method: 'POST' });
 }
 
+export async function authForgotPassword(email: string): Promise<string> {
+  const data = await request<{ message: string }>('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  });
+  return data.message;
+}
+
+export async function authResetPassword(token: string, newPassword: string): Promise<string> {
+  const data = await request<{ message: string }>('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify({ token, newPassword }),
+  });
+  return data.message;
+}
+
 export async function getMe(): Promise<AuthUser | null> {
   try {
     return await request<AuthUser>('/auth/me');
@@ -518,4 +534,23 @@ export async function addReview(
 
 export async function deleteReview(reviewId: string): Promise<void> {
   await request(`/reviews/${reviewId}`, { method: 'DELETE' });
+}
+
+// --- Chat ---
+
+export interface ChatHistoryMessage {
+  role: 'user' | 'model';
+  content: string;
+}
+
+export interface ChatAssistantResponse {
+  reply: string;
+  fallbackUsed: boolean;
+}
+
+export async function chatWithAssistant(history: ChatHistoryMessage[]): Promise<ChatAssistantResponse> {
+  return request<ChatAssistantResponse>('/chat', {
+    method: 'POST',
+    body: JSON.stringify({ history }),
+  });
 }

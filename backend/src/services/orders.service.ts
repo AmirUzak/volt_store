@@ -32,6 +32,13 @@ export class OrdersService {
           }
         },
         include: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+              username: true
+            }
+          },
           items: {
             include: {
               product: true

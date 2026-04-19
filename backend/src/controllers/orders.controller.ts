@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { OrdersService } from "../services/orders.service";
+import { EmailService } from "../services/email.service";
 import { HttpError } from "../utils/httpError";
 
 export class OrdersController {
@@ -11,6 +12,25 @@ export class OrdersController {
       }
 
       const order = await OrdersService.createOrder(req.user.userId);
+
+      void EmailService.sendOrderCreatedEmail({
+        to: order.user.email,
+        username: order.user.username,
+        orderId: order.id,
+        totalAmount: order.totalAmount,
+        items: order.items.map((item) => ({
+          name: item.product.name,
+          quantity: item.quantity,
+          priceAtOrder: item.priceAtOrder
+        }))
+      }).catch((error) => {
+        console.error("[email] order_created_send_failed", {
+          orderId: order.id,
+          email: order.user.email,
+          error: error instanceof Error ? error.message : "unknown"
+        });
+      });
+
       res.status(201).json(order);
     } catch (error) {
       if (error instanceof HttpError) {
@@ -48,6 +68,20 @@ export class OrdersController {
     try {
       const { status } = req.body;
       const order = await OrdersService.updateOrderStatus(req.params.id, status);
+
+      void EmailService.sendOrderStatusUpdatedEmail({
+        to: order.user.email,
+        username: order.user.username,
+        orderId: order.id,
+        status: order.status
+      }).catch((error) => {
+        console.error("[email] order_status_send_failed", {
+          orderId: order.id,
+          email: order.user.email,
+          error: error instanceof Error ? error.message : "unknown"
+        });
+      });
+
       res.status(200).json(order);
     } catch (error) {
       if (error instanceof HttpError) {

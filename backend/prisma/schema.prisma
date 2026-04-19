@@ -25,6 +25,8 @@ model User {
   email        String     @unique
   username     String     @unique
   passwordHash String
+  resetPasswordTokenHash String?
+  resetPasswordExpiresAt DateTime?
   role         Role       @default(USER)
   phone        String?
   addressLine1 String?

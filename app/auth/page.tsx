@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuthStore } from '@/lib/store/auth-store';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Zap } from 'lucide-react';
 import { ApiError } from '@/lib/api';
 
@@ -166,6 +167,23 @@ export default function AuthPage() {
             {error && (
               <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
                 {error}
+              </div>
+            )}
+
+            {mode === 'login' && (
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
+                >
+                  Забыли пароль?
+                </Link>
+                <Link
+                  href="/auth/reset-password"
+                  className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+                >
+                  Открыть форму сброса
+                </Link>
               </div>
             )}
 
