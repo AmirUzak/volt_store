@@ -8,7 +8,21 @@ type CartProductInput = {
   category: string;
   stock: number;
   imageUrl?: string | null;
+  slug?: string;
+  rating?: number;
+  images?: string[];
+  specs?: { label: string; value: string }[];
 };
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "") || "product";
 
 export class CartService {
   static async getCart(userId: string) {
@@ -36,6 +50,11 @@ export class CartService {
     let product = await prisma.product.findUnique({ where: { id: productId } });
 
     if (!product && productData) {
+      const images = [productData.imageUrl, ...(productData.images ?? [])]
+        .filter((value): value is string => typeof value === "string")
+        .map((value) => value.trim())
+        .filter(Boolean);
+
       product = await prisma.product.upsert({
         where: { id: productId },
         update: {
@@ -45,6 +64,10 @@ export class CartService {
           category: productData.category,
           stock: productData.stock,
           imageUrl: productData.imageUrl ?? null,
+          slug: productData.slug ?? slugify(productData.name),
+          rating: productData.rating ?? 0,
+          images,
+          specs: productData.specs ?? [],
         },
         create: {
           id: productId,
@@ -54,6 +77,10 @@ export class CartService {
           category: productData.category,
           stock: productData.stock,
           imageUrl: productData.imageUrl ?? null,
+          slug: productData.slug ?? slugify(productData.name),
+          rating: productData.rating ?? 0,
+          images,
+          specs: productData.specs ?? [],
         },
       });
     }

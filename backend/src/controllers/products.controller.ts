@@ -3,6 +3,27 @@ import { ProductsService } from "../services/products.service";
 import { uploadBufferToCloudinary } from "../utils/cloudinary";
 import { HttpError } from "../utils/httpError";
 
+const parseJsonArray = <T,>(value: unknown, fieldName: string): T[] | undefined => {
+  if (typeof value !== "string" || !value.trim()) {
+    return undefined;
+  }
+
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    if (!Array.isArray(parsed)) {
+      throw new HttpError(400, `${fieldName} must be a JSON array`);
+    }
+
+    return parsed as T[];
+  } catch (error) {
+    if (error instanceof HttpError) {
+      throw error;
+    }
+
+    throw new HttpError(400, `Invalid JSON in ${fieldName}`);
+  }
+};
+
 export class ProductsController {
   static async getAll(req: Request, res: Response) {
     try {
@@ -33,8 +54,10 @@ export class ProductsController {
 
   static async create(req: Request, res: Response) {
     try {
-      const { name, description, price, category, stock, imageUrl: imageUrlFromBody } = req.body;
+      const { name, description, price, category, stock, imageUrl: imageUrlFromBody, slug, rating } = req.body;
       let imageUrl: string | undefined;
+      const images = parseJsonArray<string>(req.body.images, "images");
+      const specs = parseJsonArray<{ label: string; value: string }>(req.body.specs, "specs");
 
       if (req.file?.buffer) {
         imageUrl = await uploadBufferToCloudinary(req.file.buffer);
@@ -48,7 +71,11 @@ export class ProductsController {
         price: Number(price),
         category,
         stock: Number(stock),
-        imageUrl
+        imageUrl,
+        slug: typeof slug === "string" ? slug : undefined,
+        rating: rating !== undefined ? Number(rating) : undefined,
+        images,
+        specs
       });
 
       res.status(201).json(product);
@@ -63,8 +90,10 @@ export class ProductsController {
 
   static async update(req: Request, res: Response) {
     try {
-      const { name, description, price, category, stock, imageUrl: imageUrlFromBody } = req.body;
+      const { name, description, price, category, stock, imageUrl: imageUrlFromBody, slug, rating } = req.body;
       let imageUrl: string | undefined;
+      const images = parseJsonArray<string>(req.body.images, "images");
+      const specs = parseJsonArray<{ label: string; value: string }>(req.body.specs, "specs");
 
       if (req.file?.buffer) {
         imageUrl = await uploadBufferToCloudinary(req.file.buffer);
@@ -77,6 +106,10 @@ export class ProductsController {
         description,
         category,
         imageUrl,
+        slug: typeof slug === "string" ? slug : undefined,
+        rating: rating !== undefined ? Number(rating) : undefined,
+        images,
+        specs,
         ...(price !== undefined ? { price: Number(price) } : {}),
         ...(stock !== undefined ? { stock: Number(stock) } : {})
       });

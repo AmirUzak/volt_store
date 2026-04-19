@@ -61,6 +61,24 @@ export class AuthController {
     }
   }
 
+  static async updateMe(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
+
+      const user = await AuthService.updateMe(req.user.userId, req.body);
+      res.status(200).json(user);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
   static async logout(_req: Request, res: Response) {
     res.clearCookie(ACCESS_COOKIE_NAME, {
       httpOnly: true,

@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { useAuthStore } from '@/lib/store/auth-store';
 import { useRouter } from 'next/navigation';
-import { getOrders, getMyReviews, type ApiOrder, type ApiReview } from '@/lib/api';
+import { ApiError, getOrders, getMyReviews, type ApiOrder, type ApiReview, updateProfile } from '@/lib/api';
 import { formatPrice } from '@/lib/config';
 import { User, ShoppingBag, Star, LogOut, ChevronDown, ChevronUp } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -21,7 +21,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function ProfilePage() {
-  const { user, isLoggedIn, isLoading, logout } = useAuthStore();
+  const { user, isLoggedIn, isLoading, logout, fetchUser } = useAuthStore();
   const router = useRouter();
 
   const [orders, setOrders] = useState<ApiOrder[]>([]);
@@ -29,6 +29,31 @@ export default function ProfilePage() {
   const [tab, setTab] = useState<'orders' | 'reviews'>('orders');
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const [dataLoading, setDataLoading] = useState(false);
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileMessage, setProfileMessage] = useState<string | null>(null);
+  const [profileError, setProfileError] = useState<string | null>(null);
+  const [profileForm, setProfileForm] = useState({
+    phone: '',
+    addressLine1: '',
+    addressLine2: '',
+    city: '',
+    postalCode: '',
+    country: '',
+    preferredPaymentMethod: '',
+  });
+
+  useEffect(() => {
+    if (!user) return;
+    setProfileForm({
+      phone: user.phone ?? '',
+      addressLine1: user.addressLine1 ?? '',
+      addressLine2: user.addressLine2 ?? '',
+      city: user.city ?? '',
+      postalCode: user.postalCode ?? '',
+      country: user.country ?? '',
+      preferredPaymentMethod: user.preferredPaymentMethod ?? '',
+    });
+  }, [user]);
 
   useEffect(() => {
     if (!isLoading && !isLoggedIn) {
@@ -48,6 +73,27 @@ export default function ProfilePage() {
   const handleLogout = async () => {
     await logout();
     router.push('/');
+  };
+
+  const handleProfileSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setProfileSaving(true);
+    setProfileMessage(null);
+    setProfileError(null);
+
+    try {
+      await updateProfile(profileForm);
+      await fetchUser();
+      setProfileMessage('Профиль обновлён');
+    } catch (error) {
+      if (error instanceof ApiError) {
+        setProfileError(error.message);
+      } else {
+        setProfileError('Не удалось обновить профиль');
+      }
+    } finally {
+      setProfileSaving(false);
+    }
   };
 
   if (isLoading) {
@@ -89,6 +135,77 @@ export default function ProfilePage() {
           </button>
         </div>
       </div>
+
+      <form
+        onSubmit={handleProfileSubmit}
+        className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800/50"
+      >
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Контактные данные и доставка</h2>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <input
+            value={profileForm.phone}
+            onChange={(e) => setProfileForm((prev) => ({ ...prev, phone: e.target.value }))}
+            placeholder="Телефон"
+            className="rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 dark:border-slate-600 dark:bg-slate-900/40"
+          />
+          <select
+            value={profileForm.preferredPaymentMethod}
+            onChange={(e) => setProfileForm((prev) => ({ ...prev, preferredPaymentMethod: e.target.value }))}
+            className="rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 dark:border-slate-600 dark:bg-slate-900/40"
+          >
+            <option value="">Способ оплаты (не выбран)</option>
+            <option value="card">Карта</option>
+            <option value="cash">Наличные</option>
+            <option value="sbp">СБП</option>
+            <option value="paypal">PayPal</option>
+          </select>
+          <input
+            value={profileForm.addressLine1}
+            onChange={(e) => setProfileForm((prev) => ({ ...prev, addressLine1: e.target.value }))}
+            placeholder="Адрес, строка 1"
+            className="rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 dark:border-slate-600 dark:bg-slate-900/40 sm:col-span-2"
+          />
+          <input
+            value={profileForm.addressLine2}
+            onChange={(e) => setProfileForm((prev) => ({ ...prev, addressLine2: e.target.value }))}
+            placeholder="Адрес, строка 2 (квартира, офис)"
+            className="rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 dark:border-slate-600 dark:bg-slate-900/40 sm:col-span-2"
+          />
+          <input
+            value={profileForm.city}
+            onChange={(e) => setProfileForm((prev) => ({ ...prev, city: e.target.value }))}
+            placeholder="Город"
+            className="rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 dark:border-slate-600 dark:bg-slate-900/40"
+          />
+          <input
+            value={profileForm.postalCode}
+            onChange={(e) => setProfileForm((prev) => ({ ...prev, postalCode: e.target.value }))}
+            placeholder="Почтовый индекс"
+            className="rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 dark:border-slate-600 dark:bg-slate-900/40"
+          />
+          <input
+            value={profileForm.country}
+            onChange={(e) => setProfileForm((prev) => ({ ...prev, country: e.target.value }))}
+            placeholder="Страна"
+            className="rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 dark:border-slate-600 dark:bg-slate-900/40 sm:col-span-2"
+          />
+        </div>
+
+        {profileMessage && (
+          <p className="mt-3 text-sm text-emerald-600 dark:text-emerald-400">{profileMessage}</p>
+        )}
+        {profileError && (
+          <p className="mt-3 text-sm text-red-600 dark:text-red-400">{profileError}</p>
+        )}
+
+        <button
+          type="submit"
+          disabled={profileSaving}
+          className="mt-4 rounded-xl bg-sky-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {profileSaving ? 'Сохранение...' : 'Сохранить профиль'}
+        </button>
+      </form>
 
       {/* Tabs */}
       <div className="mt-6 flex gap-2">

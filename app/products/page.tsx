@@ -12,8 +12,7 @@ interface PageProps {
 
 export default async function ProductsPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const products = getProducts();
-  const categories = getCategories();
+  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
   return (
     <ProductsClient
       initialProducts={products}

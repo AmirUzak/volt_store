@@ -26,24 +26,51 @@ model User {
   username     String     @unique
   passwordHash String
   role         Role       @default(USER)
+  phone        String?
+  addressLine1 String?
+  addressLine2 String?
+  city         String?
+  postalCode   String?
+  country      String?
+  preferredPaymentMethod String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   cartItems    CartItem[]
   orders       Order[]
+  reviews      Review[]
 }
 
 model Product {
   id          String      @id @default(cuid())
+  slug        String      @unique
   name        String
   description String
   price       Float
   category    String
   stock       Int         @default(0)
   imageUrl    String?
+  rating      Float       @default(0)
+  images      Json?
+  specs       Json?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   cartItems   CartItem[]
   orderItems  OrderItem[]
+  reviews     Review[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
 }
 
 model CartItem {

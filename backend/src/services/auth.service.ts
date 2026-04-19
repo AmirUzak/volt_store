@@ -4,6 +4,71 @@ import { signToken } from "../utils/jwt";
 import { HttpError } from "../utils/httpError";
 
 const SALT_ROUNDS = 10;
+const ALLOWED_PAYMENT_METHODS = ["card", "cash", "sbp", "paypal"] as const;
+
+type ProfileUpdateInput = {
+  phone?: unknown;
+  addressLine1?: unknown;
+  addressLine2?: unknown;
+  city?: unknown;
+  postalCode?: unknown;
+  country?: unknown;
+  preferredPaymentMethod?: unknown;
+};
+
+const normalizeOptionalString = (value: unknown, fieldName: string, maxLength: number): string | null | undefined => {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (value === null) {
+    return null;
+  }
+
+  if (typeof value !== "string") {
+    throw new HttpError(400, `${fieldName} must be a string`);
+  }
+
+  const normalized = value.trim();
+  if (!normalized) {
+    return null;
+  }
+
+  if (normalized.length > maxLength) {
+    throw new HttpError(400, `${fieldName} is too long`);
+  }
+
+  return normalized;
+};
+
+const validatePaymentMethod = (value: unknown): string | null | undefined => {
+  const normalized = normalizeOptionalString(value, "preferredPaymentMethod", 32);
+  if (normalized === undefined || normalized === null) {
+    return normalized;
+  }
+
+  const lowered = normalized.toLowerCase();
+  if (!ALLOWED_PAYMENT_METHODS.includes(lowered as (typeof ALLOWED_PAYMENT_METHODS)[number])) {
+    throw new HttpError(400, "preferredPaymentMethod is not supported");
+  }
+
+  return lowered;
+};
+
+const userPublicSelect = {
+  id: true,
+  email: true,
+  username: true,
+  role: true,
+  phone: true,
+  addressLine1: true,
+  addressLine2: true,
+  city: true,
+  postalCode: true,
+  country: true,
+  preferredPaymentMethod: true,
+  createdAt: true
+} as const;
 
 export class AuthService {
   static async register(email: string, username: string, password: string) {
@@ -24,7 +89,7 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
     const user = await prisma.user.create({
       data: { email, username, passwordHash },
-      select: { id: true, email: true, username: true, role: true, createdAt: true }
+      select: userPublicSelect
     });
 
     const token = signToken({
@@ -63,7 +128,14 @@ export class AuthService {
         id: user.id,
         email: user.email,
         username: user.username,
-        role: user.role
+        role: user.role,
+        phone: user.phone,
+        addressLine1: user.addressLine1,
+        addressLine2: user.addressLine2,
+        city: user.city,
+        postalCode: user.postalCode,
+        country: user.country,
+        preferredPaymentMethod: user.preferredPaymentMethod
       }
     };
   }
@@ -71,18 +143,32 @@ export class AuthService {
   static async getMe(userId: string) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: {
-        id: true,
-        email: true,
-        username: true,
-        role: true,
-        createdAt: true
-      }
+      select: userPublicSelect
     });
 
     if (!user) {
       throw new HttpError(404, "User not found");
     }
+
+    return user;
+  }
+
+  static async updateMe(userId: string, input: ProfileUpdateInput) {
+    const data = {
+      phone: normalizeOptionalString(input.phone, "phone", 32),
+      addressLine1: normalizeOptionalString(input.addressLine1, "addressLine1", 128),
+      addressLine2: normalizeOptionalString(input.addressLine2, "addressLine2", 128),
+      city: normalizeOptionalString(input.city, "city", 64),
+      postalCode: normalizeOptionalString(input.postalCode, "postalCode", 24),
+      country: normalizeOptionalString(input.country, "country", 64),
+      preferredPaymentMethod: validatePaymentMethod(input.preferredPaymentMethod)
+    };
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data,
+      select: userPublicSelect
+    });
 
     return user;
   }

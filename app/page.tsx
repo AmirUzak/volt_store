@@ -3,9 +3,8 @@ import { ArrowRight, Zap, Truck, Shield, Headphones } from 'lucide-react';
 import { getProducts, getCategories } from '@/lib/products';
 import { ProductCard } from '@/components/ProductCard';
 
-export default function HomePage() {
-  const products = getProducts();
-  const categories = getCategories();
+export default async function HomePage() {
+  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
   const featured = products.slice(0, 8);
 
   const benefits = [

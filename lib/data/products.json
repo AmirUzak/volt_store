@@ -1,752 +1,1309 @@
-[
-  {
-    "id": "1",
-    "slug": "acer-nitro-lite-laptop",
-    "name": "Acer Nitro Lite Laptop",
-    "category": "Laptop",
-    "price": 350000,
-    "rating": 4.9,
-    "inStock": true,
-    "image": "/products/acer-nitro-lite-laptop.webp",
-    "images": [
-      "/products/acer-nitro-lite-laptop.webp",
-      "/products/acer-nitro-lite-laptop-2.webp",
-      "/products/acer-nitro-lite-laptop-3.webp"
-    ],
-    "description": "High-quality Acer Nitro Lite Laptop. Category: Laptop.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Laptop"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "2",
-    "slug": "air-pods",
-    "name": "Air Pods",
-    "category": "Audio",
-    "price": 70000,
-    "rating": 4.4,
-    "inStock": true,
-    "image": "/products/air-pods.webp",
-    "images": [
-      "/products/air-pods.webp",
-      "/products/air-pods-2.webp",
-      "/products/air-pods-3.webp"
-    ],
-    "description": "High-quality Air Pods. Category: Audio.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Audio"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "3",
-    "slug": "air-pods-max",
-    "name": "Air Pods Max",
-    "category": "Audio",
-    "price": 180000,
-    "rating": 4.8,
-    "inStock": true,
-    "image": "/products/air-pods-max.webp",
-    "images": [
-      "/products/air-pods-max.webp",
-      "/products/air-pods-max-2.webp",
-      "/products/air-pods-max-3.webp"
-    ],
-    "description": "High-quality Air Pods Max. Category: Audio.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Audio"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "4",
-    "slug": "applewatchultra",
-    "name": "Applewatchultra",
-    "category": "Smart Watch",
-    "price": 420000,
-    "rating": 4.8,
-    "inStock": true,
-    "image": "/products/applewatchultra.webp",
-    "images": [
-      "/products/applewatchultra.webp",
-      "/products/applewatchultra-2.webp",
-      "/products/applewatchultra-3.webp"
-    ],
-    "description": "High-quality Applewatchultra. Category: Smart Watch.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Smart Watch"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "5",
-    "slug": "galaxys-ultra",
-    "name": "Galaxy S24 Ultra",
-    "category": "Phone",
-    "price": 355000,
-    "rating": 3.9,
-    "inStock": true,
-    "image": "/products/galaxys-ultra.webp",
-    "images": [
-      "/products/galaxys-ultra.webp",
-      "/products/galaxys-ultra-2.webp",
-      "/products/galaxys-ultra-3.webp"
-    ],
-    "description": "High-quality Galaxys Ultra. Category: Phone.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Phone"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "6",
-    "slug": "galaxyzfold",
-    "name": "Galaxy Z Fold",
-    "category": "Phone",
-    "price": 303000,
-    "rating": 4.2,
-    "inStock": true,
-    "image": "/products/galaxyzfold.webp",
-    "images": [
-      "/products/galaxyzfold.webp",
-      "/products/galaxyzfold-2.webp",
-      "/products/galaxyzfold-3.webp"
-    ],
-    "description": "High-quality Galaxyzfold. Category: Phone.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Phone"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "7",
-    "slug": "galaxy-tab-a-",
-    "name": "Galaxy Tab A +",
-    "category": "Phone",
-    "price": 260000,
-    "rating": 3.6,
-    "inStock": true,
-    "image": "/products/galaxy-tab-a-.webp",
-    "images": [
-      "/products/galaxy-tab-a-.webp",
-      "/products/galaxy-tab-a--2.webp",
-      "/products/galaxy-tab-a--3.webp"
-    ],
-    "description": "High-quality Galaxy Tab A +. Category: Phone.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Phone"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "8",
-    "slug": "garmin-feni-watch",
-    "name": "Garmin Feni Watch",
-    "category": "Smart Watch",
-    "price": 780000,
-    "rating": 4.8,
-    "inStock": true,
-    "image": "/products/garmin-feni-watch.webp",
-    "images": [
-      "/products/garmin-feni-watch.webp",
-      "/products/garmin-feni-watch-2.webp",
-      "/products/garmin-feni-watch-3.webp"
-    ],
-    "description": "High-quality Garmin Feni Watch. Category: Smart Watch.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Smart Watch"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "9",
-    "slug": "honormagick-pro",
-    "name": "Honor magick 6 Pro",
-    "category": "Phone",
-    "price": 230000,
-    "rating": 4.1,
-    "inStock": true,
-    "image": "/products/honormagick-pro.webp",
-    "images": [
-      "/products/honormagick-pro.webp",
-      "/products/honormagick-pro-2.webp",
-      "/products/honormagick-pro-3.webp"
-    ],
-    "description": "High-quality Honormagick Pro. Category: Phone.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Phone"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "10",
-    "slug": "ipadpro",
-    "name": "Ipad pro",
-    "category": "Tablet",
-    "price": 1100000,
-    "rating": 4,
-    "inStock": true,
-    "image": "/products/ipadpro.webp",
-    "images": [
-      "/products/ipadpro.webp",
-      "/products/ipadpro-2.webp",
-      "/products/ipadpro-3.webp"
-    ],
-    "description": "High-quality Ipadpro. Category: Tablet.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Tablet"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "11",
-    "slug": "iphon-pro",
-    "name": "Iphone 15 Pro",
-    "category": "Accessories",
-    "price": 478000,
-    "rating": 3.5,
-    "inStock": true,
-    "image": "/products/iphon-pro.webp",
-    "images": [
-      "/products/iphon-pro.webp",
-      "/products/iphon-pro-2.webp",
-      "/products/iphon-pro-3.webp"
-    ],
-    "description": "High-quality Iphon Pro. Category: Accessories.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Accessories"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "12",
-    "slug": "iphone-promax",
-    "name": "Iphone 15 Pro max",
-    "category": "Phone",
-    "price": 560000,
-    "rating": 3.7,
-    "inStock": true,
-    "image": "/products/iphone-promax.webp",
-    "images": [
-      "/products/iphone-promax.webp",
-      "/products/iphone-promax-2.webp",
-      "/products/iphone-promax-3.webp"
-    ],
-    "description": "High-quality Iphone Promax. Category: Phone.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Phone"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "13",
-    "slug": "iphone-pro",
-    "name": "Iphone 17 Pro",
-    "category": "Phone",
-    "price": 760000,
-    "rating": 3.9,
-    "inStock": true,
-    "image": "/products/iphone-pro.webp",
-    "images": [
-      "/products/iphone-pro.webp",
-      "/products/iphone-pro-2.webp",
-      "/products/iphone-pro-3.webp"
-    ],
-    "description": "High-quality Iphone Pro. Category: Phone.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Phone"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "14",
-    "slug": "macbookpro",
-    "name": "Macbook pro",
-    "category": "Laptop",
-    "price": 1260000,
-    "rating": 4.4,
-    "inStock": true,
-    "image": "/products/macbookpro.webp",
-    "images": [
-      "/products/macbookpro.webp",
-      "/products/macbookpro-2.webp",
-      "/products/macbookpro-3.webp"
-    ],
-    "description": "High-quality Macbookpro. Category: Laptop.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Laptop"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "15",
-    "slug": "poco-x-phone",
-    "name": "Poco X Phone",
-    "category": "Phone",
-    "price": 310000,
-    "rating": 3.9,
-    "inStock": true,
-    "image": "/products/poco-x-phone.webp",
-    "images": [
-      "/products/poco-x-phone.webp",
-      "/products/poco-x-phone-2.webp",
-      "/products/poco-x-phone-3.webp"
-    ],
-    "description": "High-quality Poco X Phone. Category: Phone.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Phone"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "16",
-    "slug": "rogstrixg",
-    "name": "Rogstrixg",
-    "category": "Laptop",
-    "price": 980000,
-    "rating": 4.3,
-    "inStock": true,
-    "image": "/products/rogstrixg.webp",
-    "images": [
-      "/products/rogstrixg.webp",
-      "/products/rogstrixg-2.webp",
-      "/products/rogstrixg-3.webp"
-    ],
-    "description": "High-quality Rogstrixg. Category: Laptop.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Laptop"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "17",
-    "slug": "rtx",
-    "name": "Rtx 4070",
-    "category": "GPU",
-    "price": 440000,
-    "rating": 3.5,
-    "inStock": true,
-    "image": "/products/rtx.webp",
-    "images": [
-      "/products/rtx.webp",
-      "/products/rtx-2.webp",
-      "/products/rtx-3.webp"
-    ],
-    "description": "High-quality Rtx. Category: GPU.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "GPU"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "18",
-    "slug": "rtx-rtx5070",
-    "name": "Rtx 5070ti",
-    "category": "GPU",
-    "price": 730000,
-    "rating": 3.5,
-    "inStock": true,
-    "image": "/products/rtx-rtx5070.webp",
-    "images": [
-      "/products/rtx-rtx5070.webp",
-      "/products/rtx-rtx5070-2.webp",
-      "/products/rtx-rtx5070-3.webp"
-    ],
-    "description": "High-quality Rtx rtx5070. Category: GPU.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "GPU"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "19",
-    "slug": "rtx-rtx5080",
-    "name": "Rtx 5080ti",
-    "category": "GPU",
-    "price": 980000,
-    "rating": 4.2,
-    "inStock": true,
-    "image": "/products/rtx-rtx5080.webp",
-    "images": [
-      "/products/rtx-rtx5080.webp",
-      "/products/rtx-rtx5080-2.webp",
-      "/products/rtx-rtx5080-3.webp"
-    ],
-    "description": "High-quality Rtx rtx5080. Category: GPU.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "GPU"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "20",
-    "slug": "samsung-galaxy-a",
-    "name": "Samsung Galaxy A50",
-    "category": "Phone",
-    "price": 150000,
-    "rating": 3.9,
-    "inStock": true,
-    "image": "/products/samsung-galaxy-a.webp",
-    "images": [
-      "/products/samsung-galaxy-a.webp",
-      "/products/samsung-galaxy-a-2.webp",
-      "/products/samsung-galaxy-a-3.webp"
-    ],
-    "description": "High-quality Samsung Galaxy A. Category: Phone.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Phone"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "21",
-    "slug": "sonywh",
-    "name": "Sony wh6",
-    "category": "Audio",
-    "price": 48000,
-    "rating": 5,
-    "inStock": true,
-    "image": "/products/sonywh.webp",
-    "images": [
-      "/products/sonywh.webp",
-      "/products/sonywh-2.webp",
-      "/products/sonywh-3.webp"
-    ],
-    "description": "High-quality Sonywh. Category: Audio.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Audio"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "22",
-    "slug": "tshield-tb",
-    "name": "Tshield Tb",
-    "category": "Storage",
-    "price": 55000,
-    "rating": 3.9,
-    "inStock": true,
-    "image": "/products/tshield-tb.webp",
-    "images": [
-      "/products/tshield-tb.webp",
-      "/products/tshield-tb-2.webp",
-      "/products/tshield-tb-3.webp"
-    ],
-    "description": "High-quality Tshield Tb. Category: Storage.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Storage"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "23",
-    "slug": "tuff-gaming",
-    "name": "Tuff Gaming",
-    "category": "Laptop",
-    "price": 490000,
-    "rating": 4.8,
-    "inStock": true,
-    "image": "/products/tuff-gaming.webp",
-    "images": [
-      "/products/tuff-gaming.webp",
-      "/products/tuff-gaming-2.webp",
-      "/products/tuff-gaming-3.webp"
-    ],
-    "description": "High-quality Tuff Gaming. Category: Laptop.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Laptop"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "24",
-    "slug": "xiaomi-ultra",
-    "name": "Xiaomi Ultra",
-    "category": "Phone",
-    "price": 260000,
-    "rating": 4.1,
-    "inStock": true,
-    "image": "/products/xiaomi-ultra.webp",
-    "images": [
-      "/products/xiaomi-ultra.webp",
-      "/products/xiaomi-ultra-2.webp",
-      "/products/xiaomi-ultra-3.webp"
-    ],
-    "description": "High-quality Xiaomi Ultra. Category: Phone.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Phone"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  },
-  {
-    "id": "25",
-    "slug": "xiaomi-mi-band-watch",
-    "name": "Xiaomi Mi Band Watch",
-    "category": "Smart Watch",
-    "price": 26000,
-    "rating": 3.6,
-    "inStock": true,
-    "image": "/products/xiaomi-mi-band-watch.webp",
-    "images": [
-      "/products/xiaomi-mi-band-watch.webp",
-      "/products/xiaomi-mi-band-watch-2.webp",
-      "/products/xiaomi-mi-band-watch-3.webp"
-    ],
-    "description": "High-quality Xiaomi Mi Band Watch. Category: Smart Watch.",
-    "specs": [
-      {
-        "label": "Category",
-        "value": "Smart Watch"
-      },
-      {
-        "label": "Condition",
-        "value": "New"
-      },
-      {
-        "label": "Warranty",
-        "value": "12 months"
-      }
-    ]
-  }
+﻿[
+    {
+        "id":  "1",
+        "slug":  "acer-nitro-lite-laptop",
+        "name":  "Acer Nitro Lite Laptop",
+        "category":  "Laptop",
+        "price":  350000,
+        "rating":  4.9,
+        "inStock":  true,
+        "image":  "/products/acer-nitro-lite-laptop.webp",
+        "images":  [
+                       "/products/acer-nitro-lite-laptop.webp",
+                       "/products/acer-nitro-lite-laptop-2.webp",
+                       "/products/acer-nitro-lite-laptop-3.webp"
+                   ],
+        "description":  "High-quality Acer Nitro Lite Laptop. Category: Laptop.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Laptop"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "2",
+        "slug":  "air-pods",
+        "name":  "Air Pods",
+        "category":  "Audio",
+        "price":  70000,
+        "rating":  4.4,
+        "inStock":  true,
+        "image":  "/products/air-pods.webp",
+        "images":  [
+                       "/products/air-pods.webp",
+                       "/products/air-pods-2.webp",
+                       "/products/air-pods-3.webp",
+                       "/products/apple-airpods-4-1.webp",
+                       "/products/apple-airpods-4-2.webp",
+                       "/products/apple-airpods-4-3.webp",
+                       "/products/apple-earpods-1.webp",
+                       "/products/apple-earpods-2.webp",
+                       "/products/apple-earpods-3.webp"
+                   ],
+        "description":  "High-quality Air Pods. Category: Audio.",
+        "specs":  [
+                      {
+                          "label":  "Type",
+                          "value":  "True wireless earbuds"
+                      },
+                      {
+                          "label":  "Battery",
+                          "value":  "Up to 30 hours with case"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Adaptive EQ"
+                      }
+                  ]
+    },
+    {
+        "id":  "3",
+        "slug":  "air-pods-max",
+        "name":  "Air Pods Max",
+        "category":  "Audio",
+        "price":  180000,
+        "rating":  4.8,
+        "inStock":  true,
+        "image":  "/products/air-pods-max.webp",
+        "images":  [
+                       "/products/air-pods-max.webp",
+                       "/products/air-pods-max-2.webp",
+                       "/products/air-pods-max-3.webp"
+                   ],
+        "description":  "High-quality Air Pods Max. Category: Audio.",
+        "specs":  [
+                      {
+                          "label":  "Type",
+                          "value":  "Wired earbuds"
+                      },
+                      {
+                          "label":  "Connector",
+                          "value":  "USB-C"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Clear voice pickup"
+                      }
+                  ]
+    },
+    {
+        "id":  "4",
+        "slug":  "applewatchultra",
+        "name":  "Applewatchultra",
+        "category":  "Smart Watch",
+        "price":  420000,
+        "rating":  4.8,
+        "inStock":  true,
+        "image":  "/products/applewatchultra.webp",
+        "images":  [
+                       "/products/applewatchultra.webp",
+                       "/products/applewatchultra-2.webp",
+                       "/products/applewatchultra-3.webp"
+                   ],
+        "description":  "High-quality Applewatchultra. Category: Smart Watch.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Smart Watch"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "5",
+        "slug":  "galaxys-ultra",
+        "name":  "Galaxy S24 Ultra",
+        "category":  "Phone",
+        "price":  355000,
+        "rating":  3.9,
+        "inStock":  true,
+        "image":  "/products/galaxys-ultra.webp",
+        "images":  [
+                       "/products/galaxys-ultra.webp",
+                       "/products/galaxys-ultra-2.webp",
+                       "/products/galaxys-ultra-3.webp",
+                       "/products/samsung-galaxy-s25-ultra-1.webp",
+                       "/products/samsung-galaxy-s25-ultra-3.webp"
+                   ],
+        "description":  "High-quality Galaxys Ultra. Category: Phone.",
+        "specs":  [
+                      {
+                          "label":  "Display",
+                          "value":  "6.1-inch class OLED"
+                      },
+                      {
+                          "label":  "Camera",
+                          "value":  "Advanced dual-camera system"
+                      },
+                      {
+                          "label":  "Battery",
+                          "value":  "All-day battery life"
+                      }
+                  ]
+    },
+    {
+        "id":  "6",
+        "slug":  "galaxyzfold",
+        "name":  "Galaxy Z Fold",
+        "category":  "Phone",
+        "price":  303000,
+        "rating":  4.2,
+        "inStock":  true,
+        "image":  "/products/galaxyzfold.webp",
+        "images":  [
+                       "/products/galaxyzfold.webp",
+                       "/products/galaxyzfold-2.webp",
+                       "/products/galaxyzfold-3.webp"
+                   ],
+        "description":  "High-quality Galaxyzfold. Category: Phone.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Phone"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "7",
+        "slug":  "galaxy-tab-a-",
+        "name":  "Galaxy Tab A +",
+        "category":  "Phone",
+        "price":  260000,
+        "rating":  3.6,
+        "inStock":  true,
+        "image":  "/products/galaxy-tab-a-.webp",
+        "images":  [
+                       "/products/galaxy-tab-a-.webp",
+                       "/products/galaxy-tab-a--2.webp",
+                       "/products/galaxy-tab-a--3.webp"
+                   ],
+        "description":  "High-quality Galaxy Tab A +. Category: Phone.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Phone"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "8",
+        "slug":  "garmin-feni-watch",
+        "name":  "Garmin Feni Watch",
+        "category":  "Smart Watch",
+        "price":  780000,
+        "rating":  4.8,
+        "inStock":  true,
+        "image":  "/products/garmin-feni-watch.webp",
+        "images":  [
+                       "/products/garmin-feni-watch.webp",
+                       "/products/garmin-feni-watch-2.webp",
+                       "/products/garmin-feni-watch-3.webp"
+                   ],
+        "description":  "High-quality Garmin Feni Watch. Category: Smart Watch.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Smart Watch"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "9",
+        "slug":  "honormagick-pro",
+        "name":  "Honor magick 6 Pro",
+        "category":  "Phone",
+        "price":  230000,
+        "rating":  4.1,
+        "inStock":  true,
+        "image":  "/products/honormagick-pro.webp",
+        "images":  [
+                       "/products/honormagick-pro.webp",
+                       "/products/honormagick-pro-2.webp",
+                       "/products/honormagick-pro-3.webp"
+                   ],
+        "description":  "High-quality Honormagick Pro. Category: Phone.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Phone"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "10",
+        "slug":  "ipadpro",
+        "name":  "Ipad pro",
+        "category":  "Tablet",
+        "price":  1100000,
+        "rating":  4,
+        "inStock":  true,
+        "image":  "/products/ipadpro.webp",
+        "images":  [
+                       "/products/ipadpro.webp",
+                       "/products/ipadpro-2.webp",
+                       "/products/ipadpro-3.webp"
+                   ],
+        "description":  "High-quality Ipadpro. Category: Tablet.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Tablet"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "11",
+        "slug":  "iphon-pro",
+        "name":  "Iphone 15 Pro",
+        "category":  "Accessories",
+        "price":  478000,
+        "rating":  3.5,
+        "inStock":  true,
+        "image":  "/products/iphon-pro.webp",
+        "images":  [
+                       "/products/iphon-pro.webp",
+                       "/products/iphon-pro-2.webp",
+                       "/products/iphon-pro-3.webp"
+                   ],
+        "description":  "High-quality Iphon Pro. Category: Accessories.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Accessories"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "12",
+        "slug":  "iphone-promax",
+        "name":  "Iphone 15 Pro max",
+        "category":  "Phone",
+        "price":  560000,
+        "rating":  3.7,
+        "inStock":  true,
+        "image":  "/products/iphone-promax.webp",
+        "images":  [
+                       "/products/iphone-promax.webp",
+                       "/products/iphone-promax-2.webp",
+                       "/products/iphone-promax-3.webp"
+                   ],
+        "description":  "High-quality Iphone Promax. Category: Phone.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Phone"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "13",
+        "slug":  "iphone-pro",
+        "name":  "Iphone 17 Pro",
+        "category":  "Phone",
+        "price":  760000,
+        "rating":  3.9,
+        "inStock":  true,
+        "image":  "/products/iphone-pro.webp",
+        "images":  [
+                       "/products/iphone-pro.webp",
+                       "/products/iphone-pro-2.webp",
+                       "/products/iphone-pro-3.webp",
+                       "/products/apple-iphone-16-1.webp",
+                       "/products/apple-iphone-16-3.webp"
+                   ],
+        "description":  "High-quality Iphone Pro. Category: Phone.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Phone"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "14",
+        "slug":  "macbookpro",
+        "name":  "Macbook pro",
+        "category":  "Laptop",
+        "price":  1260000,
+        "rating":  4.4,
+        "inStock":  true,
+        "image":  "/products/macbookpro.webp",
+        "images":  [
+                       "/products/macbookpro.webp",
+                       "/products/macbookpro-2.webp",
+                       "/products/macbookpro-3.webp"
+                   ],
+        "description":  "High-quality Macbookpro. Category: Laptop.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Laptop"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "15",
+        "slug":  "poco-x-phone",
+        "name":  "Poco X Phone",
+        "category":  "Phone",
+        "price":  310000,
+        "rating":  3.9,
+        "inStock":  true,
+        "image":  "/products/poco-x-phone.webp",
+        "images":  [
+                       "/products/poco-x-phone.webp",
+                       "/products/poco-x-phone-2.webp",
+                       "/products/poco-x-phone-3.webp"
+                   ],
+        "description":  "High-quality Poco X Phone. Category: Phone.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Phone"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "16",
+        "slug":  "rogstrixg",
+        "name":  "Rogstrixg",
+        "category":  "Laptop",
+        "price":  980000,
+        "rating":  4.3,
+        "inStock":  true,
+        "image":  "/products/rogstrixg.webp",
+        "images":  [
+                       "/products/rogstrixg.webp",
+                       "/products/rogstrixg-2.webp",
+                       "/products/rogstrixg-3.webp"
+                   ],
+        "description":  "High-quality Rogstrixg. Category: Laptop.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Laptop"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "17",
+        "slug":  "rtx",
+        "name":  "Rtx 4070",
+        "category":  "GPU",
+        "price":  440000,
+        "rating":  3.5,
+        "inStock":  true,
+        "image":  "/products/rtx.webp",
+        "images":  [
+                       "/products/rtx.webp",
+                       "/products/rtx-2.webp",
+                       "/products/rtx-3.webp",
+                       "/products/rtx-3050-dual-oc-1.webp",
+                       "/products/rtx-3050-dual-oc-2.webp",
+                       "/products/rtx-3050-dual-oc-3.webp",
+                       "/products/rtx-3050-dual-v2-1.webp",
+                       "/products/rtx-3050-dual-v2-2.webp",
+                       "/products/rtx-3050-dual-v2-3.webp",
+                       "/products/rx-9060-xt-tuf-gaming-1.webp",
+                       "/products/rx-9060-xt-tuf-gaming-2.webp",
+                       "/products/rx-9060-xt-tuf-gaming-3.webp"
+                   ],
+        "description":  "High-quality Rtx. Category: GPU.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "GPU"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "18",
+        "slug":  "rtx-rtx5070",
+        "name":  "Rtx 5070ti",
+        "category":  "GPU",
+        "price":  730000,
+        "rating":  3.5,
+        "inStock":  true,
+        "image":  "/products/rtx-rtx5070.webp",
+        "images":  [
+                       "/products/rtx-rtx5070.webp",
+                       "/products/rtx-rtx5070-2.webp",
+                       "/products/rtx-rtx5070-3.webp"
+                   ],
+        "description":  "High-quality Rtx rtx5070. Category: GPU.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "GPU"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "19",
+        "slug":  "rtx-rtx5080",
+        "name":  "Rtx 5080ti",
+        "category":  "GPU",
+        "price":  980000,
+        "rating":  4.2,
+        "inStock":  true,
+        "image":  "/products/rtx-rtx5080.webp",
+        "images":  [
+                       "/products/rtx-rtx5080.webp",
+                       "/products/rtx-rtx5080-2.webp",
+                       "/products/rtx-rtx5080-3.webp"
+                   ],
+        "description":  "High-quality Rtx rtx5080. Category: GPU.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "GPU"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "20",
+        "slug":  "samsung-galaxy-a",
+        "name":  "Samsung Galaxy A50",
+        "category":  "Phone",
+        "price":  150000,
+        "rating":  3.9,
+        "inStock":  true,
+        "image":  "/products/samsung-galaxy-a.webp",
+        "images":  [
+                       "/products/samsung-galaxy-a.webp",
+                       "/products/samsung-galaxy-a-2.webp",
+                       "/products/samsung-galaxy-a-3.webp"
+                   ],
+        "description":  "High-quality Samsung Galaxy A. Category: Phone.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Phone"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "21",
+        "slug":  "sonywh",
+        "name":  "Sony wh6",
+        "category":  "Audio",
+        "price":  48000,
+        "rating":  5,
+        "inStock":  true,
+        "image":  "/products/sonywh.webp",
+        "images":  [
+                       "/products/sonywh.webp",
+                       "/products/sonywh-2.webp",
+                       "/products/sonywh-3.webp"
+                   ],
+        "description":  "High-quality Sonywh. Category: Audio.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Audio"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "22",
+        "slug":  "tshield-tb",
+        "name":  "Tshield Tb",
+        "category":  "Storage",
+        "price":  55000,
+        "rating":  3.9,
+        "inStock":  true,
+        "image":  "/products/tshield-tb.webp",
+        "images":  [
+                       "/products/tshield-tb.webp",
+                       "/products/tshield-tb-2.webp",
+                       "/products/tshield-tb-3.webp"
+                   ],
+        "description":  "High-quality Tshield Tb. Category: Storage.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Storage"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "23",
+        "slug":  "tuff-gaming",
+        "name":  "Tuff Gaming",
+        "category":  "Laptop",
+        "price":  490000,
+        "rating":  4.8,
+        "inStock":  true,
+        "image":  "/products/tuff-gaming.webp",
+        "images":  [
+                       "/products/tuff-gaming.webp",
+                       "/products/tuff-gaming-2.webp",
+                       "/products/tuff-gaming-3.webp"
+                   ],
+        "description":  "High-quality Tuff Gaming. Category: Laptop.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Laptop"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "24",
+        "slug":  "xiaomi-ultra",
+        "name":  "Xiaomi Ultra",
+        "category":  "Phone",
+        "price":  260000,
+        "rating":  4.1,
+        "inStock":  true,
+        "image":  "/products/xiaomi-ultra.webp",
+        "images":  [
+                       "/products/xiaomi-ultra.webp",
+                       "/products/xiaomi-ultra-2.webp",
+                       "/products/xiaomi-ultra-3.webp"
+                   ],
+        "description":  "High-quality Xiaomi Ultra. Category: Phone.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Phone"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "25",
+        "slug":  "xiaomi-mi-band-watch",
+        "name":  "Xiaomi Mi Band Watch",
+        "category":  "Smart Watch",
+        "price":  26000,
+        "rating":  3.6,
+        "inStock":  true,
+        "image":  "/products/xiaomi-mi-band-watch.webp",
+        "images":  [
+                       "/products/xiaomi-mi-band-watch.webp",
+                       "/products/xiaomi-mi-band-watch-2.webp",
+                       "/products/xiaomi-mi-band-watch-3.webp"
+                   ],
+        "description":  "High-quality Xiaomi Mi Band Watch. Category: Smart Watch.",
+        "specs":  [
+                      {
+                          "label":  "Category",
+                          "value":  "Smart Watch"
+                      },
+                      {
+                          "label":  "Condition",
+                          "value":  "New"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "26",
+        "slug":  "apple-airpods-4",
+        "name":  "Apple AirPods 4",
+        "category":  "Audio",
+        "price":  89000,
+        "rating":  4.7,
+        "inStock":  true,
+        "image":  "/products/apple-airpods-4-1.webp",
+        "images":  [
+                       "/products/apple-airpods-4-1.webp",
+                       "/products/apple-airpods-4-2.webp",
+                       "/products/apple-airpods-4-3.webp"
+                   ],
+        "description":  "Wireless earbuds with improved fit, Adaptive EQ, and up to 30 hours of battery life with the case.",
+        "specs":  [
+                      {
+                          "label":  "Type",
+                          "value":  "True wireless earbuds"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Adaptive EQ"
+                      },
+                      {
+                          "label":  "Battery",
+                          "value":  "Up to 30 hours with case"
+                      }
+                  ]
+    },
+    {
+        "id":  "27",
+        "slug":  "apple-earpods",
+        "name":  "Apple EarPods",
+        "category":  "Audio",
+        "price":  29000,
+        "rating":  4.3,
+        "inStock":  true,
+        "image":  "/products/apple-earpods-1.webp",
+        "images":  [
+                       "/products/apple-earpods-1.webp",
+                       "/products/apple-earpods-2.webp",
+                       "/products/apple-earpods-3.webp"
+                   ],
+        "description":  "Classic wired EarPods with a USB-C connector, clear voice pickup, and a comfortable in-ear design.",
+        "specs":  [
+                      {
+                          "label":  "Type",
+                          "value":  "Wired USB-C earbuds"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Clear voice pickup"
+                      },
+                      {
+                          "label":  "Fit",
+                          "value":  "Comfortable in-ear design"
+                      }
+                  ]
+    },
+    {
+        "id":  "28",
+        "slug":  "apple-iphone-16",
+        "name":  "Apple iPhone 16",
+        "category":  "Phone",
+        "price":  690000,
+        "rating":  4.8,
+        "inStock":  true,
+        "image":  "/products/apple-iphone-16-1.webp",
+        "images":  [
+                       "/products/apple-iphone-16-1.webp",
+                       "/products/apple-iphone-16-3.webp"
+                   ],
+        "description":  "Latest-generation iPhone with flagship performance, advanced cameras, and dependable all-day battery life.",
+        "specs":  [
+                      {
+                          "label":  "Display",
+                          "value":  "6.1-inch Super Retina XDR"
+                      },
+                      {
+                          "label":  "Camera",
+                          "value":  "Advanced dual-camera system"
+                      },
+                      {
+                          "label":  "Battery",
+                          "value":  "All-day battery life"
+                      }
+                  ]
+    },
+    {
+        "id":  "29",
+        "slug":  "ardor-gaming-portal",
+        "name":  "Ardor Gaming Portal",
+        "category":  "PC",
+        "price":  540000,
+        "rating":  4.5,
+        "inStock":  true,
+        "image":  "/products/ardor-gaming-portal-1.webp",
+        "images":  [
+                       "/products/ardor-gaming-portal-1.webp",
+                       "/products/ardor-gaming-portal-2.webp",
+                       "/products/ardor-gaming-portal-3.webp"
+                   ],
+        "description":  "Gaming desktop with a balanced CPU and GPU setup for smooth 1440p gaming and streaming.",
+        "specs":  [
+                      {
+                          "label":  "Use case",
+                          "value":  "1440p gaming and streaming"
+                      },
+                      {
+                          "label":  "Cooling",
+                          "value":  "Balanced dual-fan airflow"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "30",
+        "slug":  "dexp-cee-e",
+        "name":  "DEXP CEE E",
+        "category":  "Accessories",
+        "price":  59000,
+        "rating":  4.1,
+        "inStock":  true,
+        "image":  "/products/dexp-cee-e-1.webp",
+        "images":  [
+                       "/products/dexp-cee-e-1.webp",
+                       "/products/dexp-cee-e-2.webp",
+                       "/products/dexp-cee-e-3.webp"
+                   ],
+        "description":  "Compact accessory hub for expanding everyday workstation connectivity with stable, reliable operation.",
+        "specs":  [
+                      {
+                          "label":  "Type",
+                          "value":  "Connectivity hub"
+                      },
+                      {
+                          "label":  "Use case",
+                          "value":  "Expands workstation ports"
+                      },
+                      {
+                          "label":  "Warranty",
+                          "value":  "12 months"
+                      }
+                  ]
+    },
+    {
+        "id":  "31",
+        "slug":  "lg-55nano806qa",
+        "name":  "LG 55NANO806QA",
+        "category":  "TV",
+        "price":  390000,
+        "rating":  4.6,
+        "inStock":  true,
+        "image":  "/products/lg-55nano806qa-1.webp",
+        "images":  [
+                       "/products/lg-55nano806qa-1.webp",
+                       "/products/lg-55nano806qa-2.webp",
+                       "/products/lg-55nano806qa-3.webp"
+                   ],
+        "description":  "55-inch NanoCell 4K TV with vivid colors, HDR support, and a responsive smart TV experience.",
+        "specs":  [
+                      {
+                          "label":  "Size",
+                          "value":  "55-inch"
+                      },
+                      {
+                          "label":  "Panel",
+                          "value":  "NanoCell 4K"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "HDR support"
+                      }
+                  ]
+    },
+    {
+        "id":  "32",
+        "slug":  "rtx-3050-dual-oc",
+        "name":  "RTX 3050 Dual OC",
+        "category":  "GPU",
+        "price":  220000,
+        "rating":  4.2,
+        "inStock":  true,
+        "image":  "/products/rtx-3050-dual-oc-1.webp",
+        "images":  [
+                       "/products/rtx-3050-dual-oc-1.webp",
+                       "/products/rtx-3050-dual-oc-2.webp",
+                       "/products/rtx-3050-dual-oc-3.webp"
+                   ],
+        "description":  "Entry gaming GPU for esports and popular titles, featuring DLSS support and efficient dual-fan cooling.",
+        "specs":  [
+                      {
+                          "label":  "Segment",
+                          "value":  "Entry gaming"
+                      },
+                      {
+                          "label":  "Cooling",
+                          "value":  "Dual-fan design"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "DLSS support"
+                      }
+                  ]
+    },
+    {
+        "id":  "33",
+        "slug":  "rtx-3050-dual-v2",
+        "name":  "RTX 3050 Dual V2",
+        "category":  "GPU",
+        "price":  210000,
+        "rating":  4.1,
+        "inStock":  true,
+        "image":  "/products/rtx-3050-dual-v2-1.webp",
+        "images":  [
+                       "/products/rtx-3050-dual-v2-1.webp",
+                       "/products/rtx-3050-dual-v2-2.webp",
+                       "/products/rtx-3050-dual-v2-3.webp"
+                   ],
+        "description":  "Refined RTX 3050 variant with an optimized power profile and stable thermal performance under load.",
+        "specs":  [
+                      {
+                          "label":  "Segment",
+                          "value":  "Entry gaming"
+                      },
+                      {
+                          "label":  "Power",
+                          "value":  "Optimized power profile"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Stable thermals"
+                      }
+                  ]
+    },
+    {
+        "id":  "34",
+        "slug":  "rx-9060-xt-tuf-gaming",
+        "name":  "RX 9060 XT TUF Gaming",
+        "category":  "GPU",
+        "price":  520000,
+        "rating":  4.6,
+        "inStock":  true,
+        "image":  "/products/rx-9060-xt-tuf-gaming-1.webp",
+        "images":  [
+                       "/products/rx-9060-xt-tuf-gaming-1.webp",
+                       "/products/rx-9060-xt-tuf-gaming-2.webp",
+                       "/products/rx-9060-xt-tuf-gaming-3.webp"
+                   ],
+        "description":  "High-performance Radeon graphics card aimed at QHD gaming with modern ray-tracing capabilities.",
+        "specs":  [
+                      {
+                          "label":  "Segment",
+                          "value":  "QHD gaming"
+                      },
+                      {
+                          "label":  "Cooling",
+                          "value":  "TUF-grade thermal design"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Ray tracing support"
+                      }
+                  ]
+    },
+    {
+        "id":  "35",
+        "slug":  "samsung-buds-2",
+        "name":  "Samsung Buds 2",
+        "category":  "Audio",
+        "price":  65000,
+        "rating":  4.4,
+        "inStock":  true,
+        "image":  "/products/samsung-buds-2-1.webp",
+        "images":  [
+                       "/products/samsung-buds-2-1.webp",
+                       "/products/samsung-buds-2-2.webp",
+                       "/products/samsung-buds-2-3.webp"
+                   ],
+        "description":  "True wireless earbuds with active noise cancellation, rich sound, and fast Bluetooth pairing.",
+        "specs":  [
+                      {
+                          "label":  "Type",
+                          "value":  "True wireless earbuds"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Active noise cancellation"
+                      },
+                      {
+                          "label":  "Battery",
+                          "value":  "All-day listening"
+                      }
+                  ]
+    },
+    {
+        "id":  "36",
+        "slug":  "samsung-galaxy-fit3",
+        "name":  "Samsung Galaxy Fit3",
+        "category":  "Smart Watch",
+        "price":  78000,
+        "rating":  4.3,
+        "inStock":  true,
+        "image":  "/products/samsung-galaxy-fit3-1.webp",
+        "images":  [
+                       "/products/samsung-galaxy-fit3-1.webp",
+                       "/products/samsung-galaxy-fit3-2.webp",
+                       "/products/samsung-galaxy-fit3-3.webp"
+                   ],
+        "description":  "Lightweight fitness tracker with AMOLED display, health insights, and long battery life.",
+        "specs":  [
+                      {
+                          "label":  "Type",
+                          "value":  "Fitness tracker"
+                      },
+                      {
+                          "label":  "Display",
+                          "value":  "AMOLED"
+                      },
+                      {
+                          "label":  "Battery",
+                          "value":  "Long battery life"
+                      }
+                  ]
+    },
+    {
+        "id":  "37",
+        "slug":  "samsung-galaxy-s25-ultra",
+        "name":  "Samsung Galaxy S25 Ultra",
+        "category":  "Phone",
+        "price":  840000,
+        "rating":  4.9,
+        "inStock":  true,
+        "image":  "/products/samsung-galaxy-s25-ultra-1.webp",
+        "images":  [
+                       "/products/samsung-galaxy-s25-ultra-1.webp",
+                       "/products/samsung-galaxy-s25-ultra-3.webp"
+                   ],
+        "description":  "Flagship Galaxy smartphone with a premium display, advanced camera system, and top-tier performance.",
+        "specs":  [
+                      {
+                          "label":  "Display",
+                          "value":  "Flagship AMOLED"
+                      },
+                      {
+                          "label":  "Camera",
+                          "value":  "Advanced multi-camera system"
+                      },
+                      {
+                          "label":  "Performance",
+                          "value":  "Top-tier flagship chip"
+                      }
+                  ]
+    },
+    {
+        "id":  "38",
+        "slug":  "tcl85c7k",
+        "name":  "TCL 85C7K",
+        "category":  "TV",
+        "price":  920000,
+        "rating":  4.7,
+        "inStock":  true,
+        "image":  "/products/tcl85c7k-1.webp",
+        "images":  [
+                       "/products/tcl85c7k-1.webp",
+                       "/products/tcl85c7k-2.webp",
+                       "/products/tcl85c7k-3.webp"
+                   ],
+        "description":  "Large 85-inch 4K TV designed for cinematic HDR viewing and immersive living-room gaming.",
+        "specs":  [
+                      {
+                          "label":  "Size",
+                          "value":  "85-inch"
+                      },
+                      {
+                          "label":  "Panel",
+                          "value":  "4K HDR"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Cinematic gaming"
+                      }
+                  ]
+    },
+    {
+        "id":  "39",
+        "slug":  "tecno-mega-mini-m1",
+        "name":  "Tecno Mega Mini M1",
+        "category":  "PC",
+        "price":  260000,
+        "rating":  4.2,
+        "inStock":  true,
+        "image":  "/products/tecno-mega-mini-m1-1.webp",
+        "images":  [
+                       "/products/tecno-mega-mini-m1-1.webp",
+                       "/products/tecno-mega-mini-m1-2.webp",
+                       "/products/tecno-mega-mini-m1-3.webp"
+                   ],
+        "description":  "Compact mini PC with fast storage, efficient cooling, and enough power for daily productivity.",
+        "specs":  [
+                      {
+                          "label":  "Form factor",
+                          "value":  "Mini PC"
+                      },
+                      {
+                          "label":  "Storage",
+                          "value":  "Fast SSD storage"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Quiet cooling"
+                      }
+                  ]
+    },
+    {
+        "id":  "40",
+        "slug":  "xiaomi-gl",
+        "name":  "Xiaomi GL",
+        "category":  "Accessories",
+        "price":  49000,
+        "rating":  4,
+        "inStock":  true,
+        "image":  "/products/xiaomi-gl-1.webp",
+        "images":  [
+                       "/products/xiaomi-gl-1.webp",
+                       "/products/xiaomi-gl-2.webp",
+                       "/products/xiaomi-gl-3.webp"
+                   ],
+        "description":  "Practical Xiaomi accessory for everyday charging tasks and cleaner desk cable management.",
+        "specs":  [
+                      {
+                          "label":  "Type",
+                          "value":  "Charging accessory"
+                      },
+                      {
+                          "label":  "Use case",
+                          "value":  "Daily charging and cable management"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Compact travel-friendly design"
+                      }
+                  ]
+    },
+    {
+        "id":  "41",
+        "slug":  "xiaomi-super-slim-magnetic-power",
+        "name":  "Xiaomi Super Slim Magnetic Power",
+        "category":  "Accessories",
+        "price":  54000,
+        "rating":  4.4,
+        "inStock":  true,
+        "image":  "/products/xiaomi-super-slim-magnetic-power-1.webp",
+        "images":  [
+                       "/products/xiaomi-super-slim-magnetic-power-1.webp",
+                       "/products/xiaomi-super-slim-magnetic-power-2.webp",
+                       "/products/xiaomi-super-slim-magnetic-power-3.webp"
+                   ],
+        "description":  "Ultra-slim magnetic power bank for quick top-ups on the go with a pocket-friendly form factor.",
+        "specs":  [
+                      {
+                          "label":  "Type",
+                          "value":  "Magnetic power bank"
+                      },
+                      {
+                          "label":  "Profile",
+                          "value":  "Ultra-slim"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Pocket-friendly charging"
+                      }
+                  ]
+    },
+    {
+        "id":  "42",
+        "slug":  "xiaomi-tv-a-55",
+        "name":  "Xiaomi TV A 55",
+        "category":  "TV",
+        "price":  340000,
+        "rating":  4.3,
+        "inStock":  true,
+        "image":  "/products/xiaomi-tv-a-55-1.webp",
+        "images":  [
+                       "/products/xiaomi-tv-a-55-1.webp",
+                       "/products/xiaomi-tv-a-55-2.webp",
+                       "/products/xiaomi-tv-a-55-3.webp"
+                   ],
+        "description":  "55-inch 4K smart TV with clear motion, modern design, and balanced picture quality for daily use.",
+        "specs":  [
+                      {
+                          "label":  "Size",
+                          "value":  "55-inch"
+                      },
+                      {
+                          "label":  "Resolution",
+                          "value":  "4K"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Balanced picture quality"
+                      }
+                  ]
+    },
+    {
+        "id":  "43",
+        "slug":  "xiaomi-tv-s-pro",
+        "name":  "Xiaomi TV S Pro",
+        "category":  "TV",
+        "price":  510000,
+        "rating":  4.6,
+        "inStock":  true,
+        "image":  "/products/xiaomi-tv-s-pro-1.webp",
+        "images":  [
+                       "/products/xiaomi-tv-s-pro-1.webp",
+                       "/products/xiaomi-tv-s-pro-2.webp",
+                       "/products/xiaomi-tv-s-pro-3.webp"
+                   ],
+        "description":  "Premium Xiaomi 4K TV lineup with higher brightness, smoother motion, and richer contrast.",
+        "specs":  [
+                      {
+                          "label":  "Size",
+                          "value":  "Premium 4K class"
+                      },
+                      {
+                          "label":  "Brightness",
+                          "value":  "Higher brightness"
+                      },
+                      {
+                          "label":  "Feature",
+                          "value":  "Richer contrast"
+                      }
+                  ]
+    }
 ]

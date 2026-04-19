@@ -11,6 +11,7 @@ export interface Product {
   price: number;
   rating: number;
   inStock: boolean;
+  stock: number;
   image: string;
   images: string[];
   description: string;

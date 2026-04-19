@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth";
 import productsRoutes from "./routes/products";
 import ordersRoutes from "./routes/orders";
 import cartRoutes from "./routes/cart";
+import reviewsRoutes from "./routes/reviews";
 
 dotenv.config();
 
@@ -28,12 +29,14 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/products", productsRoutes);
 app.use("/api/v1/orders", ordersRoutes);
 app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/reviews", reviewsRoutes);
 
 // Legacy aliases to avoid breaking existing clients during migration.
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/orders", ordersRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/reviews", reviewsRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Route not found" });

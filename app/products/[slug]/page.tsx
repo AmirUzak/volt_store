@@ -1,22 +1,20 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getProductBySlug, getProducts } from '@/lib/products';
+import { getProductBySlug } from '@/lib/products';
 import { formatPrice } from '@/lib/config';
 import { ProductActions } from './ProductActions';
+import { ReviewsSection } from './ReviewsSection';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  const products = getProducts();
-  return products.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) return { title: 'Товар | VOLT' };
   return {
     title: `${product.name} | VOLT`,
@@ -31,7 +29,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ProductPage({ params }: PageProps) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
 
   const images = product.images?.length ? product.images : [product.image];
@@ -105,6 +103,7 @@ export default async function ProductPage({ params }: PageProps) {
           )}
         </div>
       </div>
+      <ReviewsSection productId={product.id} />
     </div>
   );
 }

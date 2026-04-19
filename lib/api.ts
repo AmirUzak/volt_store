@@ -1,15 +1,36 @@
-const BACKEND_BASE = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000').replace(/\/$/, '');
-const API_BASE = `${BACKEND_BASE}/api/v1`;
+import type { ProductSpec } from './types';
+
+const trimTrailingSlash = (value: string) => value.replace(/\/$/, '');
+
+const resolveApiBase = () => {
+  const isServer = typeof window === 'undefined';
+
+  if (isServer) {
+    const serverBase = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://backend:4000';
+    return `${trimTrailingSlash(serverBase)}/api/v1`;
+  }
+
+  const publicBase = process.env.NEXT_PUBLIC_API_URL;
+  if (publicBase && publicBase.trim()) {
+    return `${trimTrailingSlash(publicBase)}/api/v1`;
+  }
+
+  return '/api/v1';
+};
+
+const API_BASE = resolveApiBase();
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const { headers: requestHeaders, cache: customCache, ...restOptions } = options;
   const headers: HeadersInit = options.body instanceof FormData
-    ? (options.headers ?? {})
-    : { 'Content-Type': 'application/json', ...options.headers };
+    ? (requestHeaders ?? {})
+    : { 'Content-Type': 'application/json', ...requestHeaders };
 
   const res = await fetch(`${API_BASE}${path}`, {
     credentials: 'include',
+    cache: customCache ?? 'no-store',
     headers,
-    ...options,
+    ...restOptions,
   });
 
   if (!res.ok) {
@@ -41,6 +62,13 @@ export interface AuthUser {
   email: string;
   username: string;
   role: 'USER' | 'ADMIN';
+  phone?: string | null;
+  addressLine1?: string | null;
+  addressLine2?: string | null;
+  city?: string | null;
+  postalCode?: string | null;
+  country?: string | null;
+  preferredPaymentMethod?: string | null;
 }
 
 export async function authLogin(email: string, password: string): Promise<AuthUser> {
@@ -75,17 +103,36 @@ export async function getMe(): Promise<AuthUser | null> {
   }
 }
 
+export async function updateProfile(payload: {
+  phone?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  postalCode?: string;
+  country?: string;
+  preferredPaymentMethod?: string;
+}): Promise<AuthUser> {
+  return request<AuthUser>('/auth/me', {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+}
+
 // --- Products ---
 
 export interface ApiProduct {
   id: string;
+  slug: string;
   name: string;
-  description: string | null;
+  category: string;
   price: number;
-  stock: number;
-  image: string | null;
-  category: string | null;
   rating: number;
+  inStock: boolean;
+  stock: number;
+  image: string;
+  images: string[];
+  description: string;
+  specs: ProductSpec[];
   createdAt: string;
   updatedAt: string;
 }
@@ -99,25 +146,38 @@ export interface ProductsResponse {
 
 type BackendProduct = {
   id: string;
+  slug: string;
   name: string;
   description: string;
   price: number;
   stock: number;
   imageUrl: string | null;
   category: string;
+  rating: number;
+  images: string[];
+  specs: ProductSpec[];
   createdAt: string;
   updatedAt: string;
 };
 
 const mapProduct = (p: BackendProduct): ApiProduct => ({
   id: p.id,
+  slug: p.slug,
   name: p.name,
-  description: p.description ?? null,
+  description: p.description ?? '',
   price: p.price,
   stock: p.stock,
-  image: p.imageUrl ?? null,
-  category: p.category ?? null,
-  rating: 0,
+  image: p.imageUrl ?? '',
+  images: (p.images ?? []).map((image) => String(image)).filter(Boolean),
+  category: p.category ?? '',
+  rating: p.rating ?? 0,
+  inStock: p.stock > 0,
+  specs: (p.specs ?? [])
+    .map((spec) => ({
+      label: String(spec.label ?? '').trim(),
+      value: String(spec.value ?? '').trim(),
+    }))
+    .filter((spec) => spec.label.length > 0 && spec.value.length > 0),
   createdAt: p.createdAt,
   updatedAt: p.updatedAt,
 });
@@ -160,20 +220,33 @@ export async function createProduct(data: {
   price: number;
   stock: number;
   image?: string;
+  imageFile?: File | null;
   category?: string;
+  slug?: string;
+  rating?: number;
+  images?: string[];
+  specs?: ProductSpec[];
 }): Promise<ApiProduct> {
-  const payload = {
-    name: data.name,
-    description: data.description ?? '',
-    price: data.price,
-    stock: data.stock,
-    imageUrl: data.image,
-    category: data.category ?? '',
-  };
+  const payload = new FormData();
+  payload.append('name', data.name);
+  payload.append('description', data.description ?? '');
+  payload.append('price', String(data.price));
+  payload.append('stock', String(data.stock));
+  payload.append('category', data.category ?? '');
+
+  if (data.slug) payload.append('slug', data.slug);
+  if (data.rating !== undefined) payload.append('rating', String(data.rating));
+  if (data.imageFile) {
+    payload.append('image', data.imageFile);
+  } else if (data.image) {
+    payload.append('imageUrl', data.image);
+  }
+  if (data.images) payload.append('images', JSON.stringify(data.images));
+  if (data.specs) payload.append('specs', JSON.stringify(data.specs));
 
   const created = await request<BackendProduct>('/products', {
     method: 'POST',
-    body: JSON.stringify(payload),
+    body: payload,
   });
 
   return mapProduct(created);
@@ -187,17 +260,33 @@ export async function updateProduct(
     price: number;
     stock: number;
     image: string;
+    imageFile: File | null;
     category: string;
+    slug: string;
+    rating: number;
+    images: string[];
+    specs: ProductSpec[];
   }>,
 ): Promise<ApiProduct> {
-  const payload = {
-    ...data,
-    ...(data.image !== undefined ? { imageUrl: data.image } : {}),
-  };
+  const payload = new FormData();
+  if (data.name !== undefined) payload.append('name', data.name);
+  if (data.description !== undefined) payload.append('description', data.description);
+  if (data.price !== undefined) payload.append('price', String(data.price));
+  if (data.stock !== undefined) payload.append('stock', String(data.stock));
+  if (data.category !== undefined) payload.append('category', data.category);
+  if (data.slug !== undefined) payload.append('slug', data.slug);
+  if (data.rating !== undefined) payload.append('rating', String(data.rating));
+  if (data.imageFile) {
+    payload.append('image', data.imageFile);
+  } else if (data.image !== undefined) {
+    payload.append('imageUrl', data.image);
+  }
+  if (data.images !== undefined) payload.append('images', JSON.stringify(data.images));
+  if (data.specs !== undefined) payload.append('specs', JSON.stringify(data.specs));
 
   const updated = await request<BackendProduct>(`/products/${id}`, {
     method: 'PUT',
-    body: JSON.stringify(payload),
+    body: payload,
   });
 
   return mapProduct(updated);
@@ -234,6 +323,10 @@ export interface CartProductPayload {
   category: string;
   stock: number;
   imageUrl: string | null;
+  slug: string;
+  rating: number;
+  images: string[];
+  specs: ProductSpec[];
 }
 
 const mapCartItem = (item: BackendCartItem): ApiCartItem => ({

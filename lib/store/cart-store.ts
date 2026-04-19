@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { getProducts } from '@/lib/products';
 import type { Product } from '@/lib/types';
 import {
   addToCart as apiAddToCart,
@@ -53,28 +52,19 @@ const toCartProductPayload = (product: Product): CartProductPayload => ({
   description: product.description,
   price: product.price,
   category: product.category,
-  stock: product.inStock ? 1 : 0,
+  stock: product.stock,
   imageUrl: product.image,
+  slug: product.slug,
+  rating: product.rating,
+  images: product.images,
+  specs: product.specs,
 });
 
-const mapRemoteCart = (cart: ApiCart): CartItem[] => {
-  const catalog = getProducts();
-
-  return cart.items
-    .map(({ product, quantity }) => {
-      const localProduct = catalog.find((entry) => entry.id === product.id);
-
-      if (!localProduct) {
-        return null;
-      }
-
-      return {
-        product: localProduct,
-        quantity,
-      };
-    })
-    .filter((item): item is CartItem => item !== null);
-};
+const mapRemoteCart = (cart: ApiCart): CartItem[] =>
+  cart.items.map(({ product, quantity }) => ({
+    product,
+    quantity,
+  }));
 
 const syncItemsToBackend = async (items: CartItem[]) => {
   await apiClearCart();

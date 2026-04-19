@@ -35,6 +35,9 @@ interface ProductForm {
   price: string;
   stock: string;
   image: string;
+  imageFile: File | null;
+  imagesText: string;
+  specsText: string;
   category: string;
 }
 
@@ -44,8 +47,31 @@ const emptyForm: ProductForm = {
   price: '',
   stock: '',
   image: '',
+  imageFile: null,
+  imagesText: '',
+  specsText: '',
   category: '',
 };
+
+const parseLineList = (value: string) =>
+  value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+const parseSpecsText = (value: string) =>
+  parseLineList(value)
+    .map((line) => {
+      const separatorIndex = line.indexOf(':');
+      if (separatorIndex === -1) return null;
+
+      const label = line.slice(0, separatorIndex).trim();
+      const specValue = line.slice(separatorIndex + 1).trim();
+      if (!label || !specValue) return null;
+
+      return { label, value: specValue };
+    })
+    .filter((spec): spec is { label: string; value: string } => spec !== null);
 
 export default function AdminPage() {
   const { user, isLoggedIn, isLoading } = useAuthStore();
@@ -91,6 +117,13 @@ export default function AdminPage() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({
+      ...prev,
+      imageFile: e.target.files?.[0] ?? null,
+    }));
+  };
+
   const openAdd = () => {
     setEditingId(null);
     setForm(emptyForm);
@@ -106,6 +139,9 @@ export default function AdminPage() {
       price: String(product.price),
       stock: String(product.stock),
       image: product.image ?? '',
+      imageFile: null,
+      imagesText: product.images.slice(1).join('\n'),
+      specsText: product.specs.map(({ label, value }) => `${label}: ${value}`).join('\n'),
       category: product.category ?? '',
     });
     setFormError('');
@@ -121,13 +157,18 @@ export default function AdminPage() {
     }
     setFormLoading(true);
     try {
+      const images = parseLineList(form.imagesText);
+      const specs = parseSpecsText(form.specsText);
       const data = {
         name: form.name,
         description: form.description || undefined,
         price: parseFloat(form.price),
         stock: parseInt(form.stock),
         image: form.image || undefined,
+        imageFile: form.imageFile,
         category: form.category || undefined,
+        images,
+        specs,
       };
       if (editingId !== null) {
         const updated = await updateProduct(editingId, data);
@@ -302,6 +343,38 @@ export default function AdminPage() {
                         onChange={handleFormChange}
                         className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                       />
+                      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        Можно оставить URL или загрузить файл ниже.
+                      </p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                        Загрузить фото
+                      </label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageFileChange}
+                        className="mt-1 block w-full text-sm text-slate-700 file:mr-4 file:rounded-xl file:border-0 file:bg-sky-500 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-sky-600 dark:text-slate-300"
+                      />
+                      {form.imageFile && (
+                        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                          Выбран файл: {form.imageFile.name}
+                        </p>
+                      )}
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                        Дополнительные фото
+                      </label>
+                      <textarea
+                        name="imagesText"
+                        rows={3}
+                        value={form.imagesText}
+                        onChange={handleFormChange}
+                        placeholder="По одному URL в строке"
+                        className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+                      />
                     </div>
                     <div className="sm:col-span-2">
                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -312,6 +385,19 @@ export default function AdminPage() {
                         rows={3}
                         value={form.description}
                         onChange={handleFormChange}
+                        className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+                      />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                        Характеристики
+                      </label>
+                      <textarea
+                        name="specsText"
+                        rows={5}
+                        value={form.specsText}
+                        onChange={handleFormChange}
+                        placeholder="Тип: Беспроводные наушники\nАкцент: ANC"
                         className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                       />
                     </div>
