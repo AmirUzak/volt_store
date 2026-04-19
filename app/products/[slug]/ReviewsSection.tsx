@@ -20,6 +20,8 @@ export function ReviewsSection({ productId }: ReviewsSectionProps) {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [sort, setSort] = useState<'newest' | 'oldest' | 'rating_desc' | 'rating_asc'>('newest');
+  const [ratingFilter, setRatingFilter] = useState<number | 0>(0);
 
   const myReview = useMemo(
     () => reviews.find((review) => review.userId === user?.id) ?? null,
@@ -29,7 +31,10 @@ export function ReviewsSection({ productId }: ReviewsSectionProps) {
   const loadReviews = async () => {
     setLoading(true);
     try {
-      const data = await getReviews(productId);
+      const data = await getReviews(productId, {
+        sort,
+        rating: ratingFilter || undefined,
+      });
       setReviews(data);
       setError(null);
     } catch {
@@ -41,7 +46,7 @@ export function ReviewsSection({ productId }: ReviewsSectionProps) {
 
   useEffect(() => {
     loadReviews();
-  }, [productId]);
+  }, [productId, sort, ratingFilter]);
 
   useEffect(() => {
     if (!myReview) return;
@@ -91,6 +96,32 @@ export function ReviewsSection({ productId }: ReviewsSectionProps) {
     <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800/50">
       <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Отзывы</h2>
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Всего отзывов: {reviews.length}</p>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <select
+          value={sort}
+          onChange={(event) => setSort(event.target.value as 'newest' | 'oldest' | 'rating_desc' | 'rating_asc')}
+          className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 dark:border-slate-700 dark:bg-slate-900/40"
+        >
+          <option value="newest">Сначала новые</option>
+          <option value="oldest">Сначала старые</option>
+          <option value="rating_desc">С высокой оценкой</option>
+          <option value="rating_asc">С низкой оценкой</option>
+        </select>
+
+        <select
+          value={ratingFilter}
+          onChange={(event) => setRatingFilter(Number(event.target.value) as number | 0)}
+          className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 dark:border-slate-700 dark:bg-slate-900/40"
+        >
+          <option value={0}>Все оценки</option>
+          <option value={5}>Только 5 звезд</option>
+          <option value={4}>Только 4 звезды</option>
+          <option value={3}>Только 3 звезды</option>
+          <option value={2}>Только 2 звезды</option>
+          <option value={1}>Только 1 звезда</option>
+        </select>
+      </div>
 
       {isLoggedIn ? (
         <form onSubmit={handleSubmit} className="mt-4 space-y-3 rounded-xl border border-slate-200 p-4 dark:border-slate-700">
@@ -172,6 +203,11 @@ export function ReviewsSection({ productId }: ReviewsSectionProps) {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-sm font-medium text-slate-900 dark:text-white">{review.user?.username ?? 'Пользователь'}</p>
+                  {review.verifiedPurchase && (
+                    <span className="mt-1 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                      Подтвержденная покупка
+                    </span>
+                  )}
                   <div className="mt-1 flex items-center gap-1">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star

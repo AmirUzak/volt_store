@@ -474,13 +474,22 @@ export interface ApiReview {
   rating: number;
   comment: string | null;
   createdAt: string;
+  verifiedPurchase?: boolean;
   user?: { id: string; username: string };
   product?: { id: string; name: string; image: string | null };
 }
 
-export async function getReviews(productId: string): Promise<ApiReview[]> {
+export async function getReviews(
+  productId: string,
+  params?: { sort?: 'newest' | 'oldest' | 'rating_desc' | 'rating_asc'; rating?: number },
+): Promise<ApiReview[]> {
   try {
-    const data = await request<{ reviews: ApiReview[] }>(`/reviews/product/${productId}`);
+    const query = new URLSearchParams();
+    if (params?.sort) query.set('sort', params.sort);
+    if (params?.rating) query.set('rating', String(params.rating));
+    const suffix = query.toString() ? `?${query.toString()}` : '';
+
+    const data = await request<{ reviews: ApiReview[] }>(`/reviews/product/${productId}${suffix}`);
     return data.reviews;
   } catch {
     return [];

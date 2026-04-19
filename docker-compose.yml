@@ -4,9 +4,9 @@ services:
     container_name: volt-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: volt_db
-      POSTGRES_USER: volt_app
-      POSTGRES_PASSWORD: VoltAppPass_2026!
+      POSTGRES_DB: ${POSTGRES_DB:-volt_db}
+      POSTGRES_USER: ${POSTGRES_USER:-volt_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
@@ -27,10 +27,10 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://volt_app:VoltAppPass_2026!@postgres:5432/volt_db
-      JWT_SECRET: volt_dev_secret_change_me
-      JWT_EXPIRES_IN: 7d
-      FRONTEND_URL: http://localhost:3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-volt_app}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-volt_db}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
       CLOUDINARY_CLOUD_NAME: ""
       CLOUDINARY_API_KEY: ""
       CLOUDINARY_API_SECRET: ""
