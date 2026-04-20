@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import { HttpError } from "../utils/httpError";
@@ -176,18 +176,18 @@ const logChatRequest = (payload: {
   );
 };
 
-const getModel = () => {
+const getClient = () => {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     throw new HttpError(503, "AI assistant is not configured");
   }
 
   const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-  const genAI = new GoogleGenerativeAI(apiKey);
+  const client = new GoogleGenAI({ apiKey });
 
   return {
     modelName,
-    model: genAI.getGenerativeModel({ model: modelName }),
+    client,
   };
 };
 
@@ -235,7 +235,7 @@ export class ChatController {
         buildProductContext(relevantProducts),
       ].join("\n\n");
 
-      const { modelName, model } = getModel();
+      const { modelName, client } = getClient();
       let fallbackUsed = false;
       let promptTokens: number | undefined;
       let completionTokens: number | undefined;
@@ -243,32 +243,39 @@ export class ChatController {
       let reply: string;
 
       try {
-        const result = await model.generateContent({
+        const result = await client.models.generateContent({
+          model: modelName,
           contents: history.map((item) => ({
             role: item.role,
             parts: [{ text: item.content }],
           })),
-          systemInstruction: {
-            role: "system",
-            parts: [{ text: systemPrompt }],
-          },
-          generationConfig: {
+          config: {
+            systemInstruction: {
+              role: "system",
+              parts: [{ text: systemPrompt }],
+            },
             temperature: 0.4,
             maxOutputTokens: 700,
           },
         });
 
-        const usage = result.response.usageMetadata;
+        const usage: any = (result as any).usageMetadata || (result as any).response?.usageMetadata;
         promptTokens = usage?.promptTokenCount;
-        completionTokens = usage?.candidatesTokenCount;
+        completionTokens = usage?.candidatesTokenCount || usage?.completionTokenCount;
         totalTokens = usage?.totalTokenCount;
 
-        const aiReply = result.response.text().trim();
-        if (!aiReply) {
+        const resultAny = result as any;
+        const aiReply = typeof resultAny.text === "function"
+          ? resultAny.text()
+          : typeof resultAny.text === "string"
+            ? resultAny.text
+            : resultAny.candidates?.[0]?.content?.parts?.[0]?.text;
+        const normalizedReply = typeof aiReply === "string" ? aiReply.trim() : "";
+        if (!normalizedReply) {
           throw new Error("empty-ai-reply");
         }
 
-        reply = limitReplyLength(aiReply);
+        reply = limitReplyLength(normalizedReply);
       } catch (_error) {
         fallbackUsed = true;
         reply = limitReplyLength(buildFallbackReply(latestUserMessage, relevantProducts));
