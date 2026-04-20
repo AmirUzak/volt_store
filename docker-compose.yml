@@ -39,6 +39,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-volt_app}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-volt_db}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
       REDIS_URL: redis://redis:6379
