@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   title: 'VOLT — Электроника и гаджеты',
   description:
     'Современный магазин электроники и гаджетов. Смартфоны, ноутбуки, аудио, аксессуары. Быстрая доставка и гарантия.',
+  icons: {
+    icon: '/icon.png',
+    apple: '/icon.png',
+  },
   openGraph: {
     title: 'VOLT — Электроника и гаджеты',
     description: 'Современный магазин электроники и гаджетов.',
