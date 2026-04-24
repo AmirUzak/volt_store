@@ -6,6 +6,10 @@ pipeline {
         timestamps()
     }
 
+    environment {
+        COMPOSE_PROJECT_NAME = 'volt'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -20,12 +24,19 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
+                    if [ ! -d /root/volt_store ]; then
+                        echo "ERROR: /root/volt_store is not mounted into Jenkins container"
+                        exit 1
+                    fi
+
                     cd /root/volt_store
-                    git pull origin main
-                    docker-compose --profile prod up -d --build backend frontend nginx
+                    git fetch origin main
+                    git checkout main
+                    git pull --ff-only origin main
+                    docker compose -p "$COMPOSE_PROJECT_NAME" --profile prod up -d --build backend frontend nginx
                     sleep 10
-                    docker-compose exec -T backend npx prisma migrate deploy || true
-                    docker-compose ps
+                    docker compose -p "$COMPOSE_PROJECT_NAME" exec -T backend npx prisma migrate deploy || true
+                    docker compose -p "$COMPOSE_PROJECT_NAME" ps
                 '''
             }
         }
@@ -33,7 +44,7 @@ pipeline {
 
     post {
         always {
-            sh 'cd /root/volt_store && docker-compose ps || true'
+            sh 'cd /root/volt_store && docker compose -p "$COMPOSE_PROJECT_NAME" ps || true'
         }
     }
 }

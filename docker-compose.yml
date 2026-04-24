@@ -159,6 +159,8 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_data:/var/jenkins_home
+      # Host project mount so Jenkins container can run git/docker compose in /root/volt_store
+      - /root/volt_store:/root/volt_store
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
     environment:
