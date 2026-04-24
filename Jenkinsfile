@@ -35,11 +35,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 withCredentials([file(credentialsId: 'volt-env-file', variable: 'ENV_FILE')]) {
-                    sh 'cp $ENV_FILE .env'
-                    sh 'docker-compose --profile prod up -d --build'
+                    sh 'cp $ENV_FILE /root/volt_store/.env'
+                    sh 'cd /root/volt_store && docker-compose --profile prod down --remove-orphans || true'
+                    sh 'cd /root/volt_store && docker-compose --profile prod up -d --build'
                     sh 'sleep 15'
-                    sh 'docker-compose exec -T backend npx prisma migrate deploy || true'
-                    sh 'docker-compose ps'
+                    sh 'cd /root/volt_store && docker-compose exec -T backend npx prisma migrate deploy || true'
+                    sh 'cd /root/volt_store && docker-compose ps'
                 }
             }
         }
@@ -47,11 +48,11 @@ pipeline {
 
     post {
         always {
-            sh 'docker-compose ps || true'
+            sh 'cd /root/volt_store && docker-compose ps || true'
         }
         failure {
-            sh 'docker-compose logs > build-logs.txt 2>&1 || true'
-            archiveArtifacts artifacts: 'build-logs.txt', allowEmptyArchive: true
+            sh 'cd /root/volt_store && docker-compose logs > /tmp/build-logs.txt 2>&1 || true'
+            archiveArtifacts artifacts: '/tmp/build-logs.txt', allowEmptyArchive: true
         }
     }
 }
