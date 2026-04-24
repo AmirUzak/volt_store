@@ -1,0 +1,120 @@
+---
+- name: Deploy VOLT Store
+  hosts: voltstore
+  become: true
+
+  vars:
+    project_dir: /root/volt_store
+    repo_url: https://github.com/AmirUzak/volt_store.git
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+          - git
+          - curl
+          - ufw
+          - fail2ban
+        state: present
+
+    - name: Start and enable Docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Start and enable Fail2Ban
+      systemd:
+        name: fail2ban
+        state: started
+        enabled: yes
+
+    - name: Configure UFW - allow SSH
+      ufw:
+        rule: allow
+        name: OpenSSH
+
+    - name: Configure UFW - allow HTTP
+      ufw:
+        rule: allow
+        port: '80'
+
+    - name: Configure UFW - allow HTTPS
+      ufw:
+        rule: allow
+        port: '443'
+
+    - name: Configure UFW - deny internal ports
+      ufw:
+        rule: deny
+        port: "{{ item }}"
+      loop:
+        - '8080'
+        - '9090'
+        - '3001'
+        - '9100'
+        - '4000'
+        - '5433'
+        - '6379'
+
+    - name: Enable UFW
+      ufw:
+        state: enabled
+
+    - name: Clone or update repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ project_dir }}"
+        version: main
+        force: yes
+
+    - name: Create logs directory
+      file:
+        path: "{{ project_dir }}/logs/nginx"
+        state: directory
+        mode: '0755'
+
+    - name: Create backups directory
+      file:
+        path: /root/backups
+        state: directory
+        mode: '0755'
+
+    - name: Start all services
+      shell: |
+        cd {{ project_dir }}
+        docker-compose --profile prod up -d
+      args:
+        executable: /bin/bash
+
+    - name: Wait for services to start
+      pause:
+        seconds: 30
+
+    - name: Run database migrations
+      shell: |
+        cd {{ project_dir }}
+        docker-compose exec -T backend npx prisma migrate deploy || true
+      args:
+        executable: /bin/bash
+
+    - name: Setup backup cron job
+      cron:
+        name: "VOLT Store DB Backup"
+        minute: "0"
+        hour: "3"
+        job: "/root/volt_store/backup.sh >> /root/backups/backup.log 2>&1"
+
+    - name: Verify services are running
+      shell: docker-compose -f {{ project_dir }}/docker-compose.yml ps
+      register: services_status
+
+    - name: Show services status
+      debug:
+        msg: "{{ services_status.stdout }}"
