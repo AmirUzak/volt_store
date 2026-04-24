@@ -28,9 +28,9 @@ Replace `/opt/volt_store` with your real repository path.
 
 ```bash
 sudo mkdir -p /etc/fail2ban/filter.d
-sudo cp /opt/volt_store/security/fail2ban/filter.d/nginx-auth-bruteforce.conf /etc/fail2ban/filter.d/
-sudo cp /opt/volt_store/security/fail2ban/filter.d/nginx-scanners.conf /etc/fail2ban/filter.d/
-sudo cp /opt/volt_store/security/fail2ban/jail.local.example /etc/fail2ban/jail.local
+sudo cp /root/volt_store/security/fail2ban/filter.d/nginx-auth-bruteforce.conf /etc/fail2ban/filter.d/
+sudo cp /root/volt_store/security/fail2ban/filter.d/nginx-scanners.conf /etc/fail2ban/filter.d/
+sudo cp /root/volt_store/security/fail2ban/jail.local.example /etc/fail2ban/jail.local
 ```
 
 ## Adjust paths and whitelist
@@ -57,8 +57,8 @@ sudo fail2ban-client status nginx-scanners
 Replace `/opt/volt_store` with the real absolute path on your Linux host.
 
 ```bash
-sudo fail2ban-regex /opt/volt_store/logs/nginx/auth_access.log /etc/fail2ban/filter.d/nginx-auth-bruteforce.conf
-sudo fail2ban-regex /opt/volt_store/logs/nginx/scanners_access.log /etc/fail2ban/filter.d/nginx-scanners.conf
+sudo fail2ban-regex /root/volt_store/logs/nginx/auth_access.log /etc/fail2ban/filter.d/nginx-auth-bruteforce.conf
+sudo fail2ban-regex /root/volt_store/logs/nginx/scanners_access.log /etc/fail2ban/filter.d/nginx-scanners.conf
 ```
 
 ## Notes
