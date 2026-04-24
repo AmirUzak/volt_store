@@ -1,15 +1,30 @@
-# Frontend Starter (Next.js)
+# VOLT Store
 
-Минимальная фронтенд-версия проекта на Next.js + TypeScript + TailwindCSS.
+Полноценный e-commerce проект: Next.js frontend + Node.js/Express backend + PostgreSQL + Redis + Nginx + Docker.
 
 ## Что внутри
 
 - `app/` — страницы и layout (App Router)
 - `components/` — UI-компоненты
+- `backend/` — API (Express + Prisma)
+- `jenkins/` + `Jenkinsfile` — CI/CD пайплайн и Jenkins Configuration as Code
+- `terraform/` — IaC для Docker-инфраструктуры (network, postgres, redis)
+- `ansible/` — автоматизация развёртывания и базового hardening сервера
 - `lib/` — утилиты, типы и данные
 - `public/` — статические файлы
 - `public/images/products/` — исходные изображения товаров
 - `public/products/` — изображения, которые используются в `lib/data/products.json`
+
+### Сервер (DigitalOcean Droplet)
+
+| Параметр | Значение |
+|---------|---------|
+| Провайдер | DigitalOcean |
+| Локация | Frankfurt (FRA1) |
+| ОС | Ubuntu 24.04 LTS x64 |
+| vCPU | 1 |
+| RAM | 1 GB |
+| Диск | 25 GB SSD |
 
 ## Быстрый старт
 
@@ -31,10 +46,14 @@ NEXT_PUBLIC_CURRENCY_SYMBOL=$
 
 ## Статус репозитория
 
-Из проекта удалены backend, docker/nginx-конфиги и вспомогательные backend-скрипты.
-Это чистая фронтенд-база для дальнейшей разработки.
+Проект работает как fullstack-стек и запускается через Docker Compose.
+
+Полезные команды:
+
+```bash
 docker compose -p volt up -d --build frontend nginx
 docker compose -p volt exec frontend node -e "const p=require('./lib/data/products.json'); console.log(p.length)"
+```
 
 ## Changelog (Апрель 2026)
 
@@ -69,13 +88,13 @@ docker compose -p volt exec frontend node -e "const p=require('./lib/data/produc
 Локальная разработка без SSL:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+docker compose -p volt -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 ```
 
 Продакшен с SSL и certbot:
 
 ```bash
-docker compose --profile prod up -d --build
+docker compose -p volt --profile prod up -d --build
 ```
 
 ## Security hardening (Fail2Ban + Nginx)
@@ -93,3 +112,73 @@ Fail2Ban templates are in:
 - `security/fail2ban/filter.d/nginx-scanners.conf`
 - `security/fail2ban/jail.local.example`
 - `security/fail2ban/README.md`
+
+## CI/CD и IaC
+
+### Jenkins
+
+- Pipeline описан в `Jenkinsfile`:
+	- checkout ветки `main`,
+	- deploy через `docker-compose --profile prod up -d --build backend frontend nginx`,
+	- запуск `prisma migrate deploy` после деплоя,
+	- post-проверка `docker-compose ps`.
+- Jenkins образ и плагины настраиваются в:
+	- `jenkins/Dockerfile`,
+	- `jenkins/plugins.txt`,
+	- `jenkins/casc.yaml`.
+
+### Terraform
+
+- Terraform конфигурация находится в `terraform/`:
+	- `main.tf` — Docker provider + ресурсы network/postgres/redis,
+	- `variables.tf` — параметры БД,
+	- `outputs.tf` — outputs по созданным ресурсам,
+	- `README.md` — быстрый старт по `terraform init/plan/apply`.
+
+### Ansible
+
+- Ansible конфигурация находится в `ansible/`:
+	- `inventory.ini` — хост `voltstore` (Droplet FRA1),
+	- `deploy.yml` — установка docker/git/fail2ban, настройка UFW, деплой проекта, миграции и cron backup.
+
+## Что было сделано (апрель 2026)
+
+
+
+### Инфраструктура и деплой
+
+- Добавлены и синхронизированы Docker режимы для dev/prod.
+- Для `docker compose` используется явный project name: `-p volt`.
+- Прод-настройка использует Nginx + SSL + certbot.
+
+### Каталог и админка
+
+- Каталог переведен на runtime API-запросы вместо статичного чтения JSON на этапе сборки.
+- Страницы каталога и товара работают динамически по `slug`.
+- Админка поддерживает `FormData`, загрузку главного изображения, галерею и `specs`.
+
+### Backend и БД
+
+- Модель `Product` расширена полями: `slug`, `rating`, `images`, `specs`, `stock`.
+- Обновлены сервисы/контроллеры товаров: нормализация данных и генерация уникального `slug`.
+- Обновлен seed-поток для приоритетной загрузки каталога из `/seed/products.json`.
+
+### Защита от атак
+
+- В Nginx добавлен security log format и хостовые логи:
+	- `logs/nginx/access.log`
+	- `logs/nginx/auth_access.log`
+	- `logs/nginx/scanners_access.log`
+- Добавлен Nginx rate limit на auth-endpoints (`/api/(v1/)?auth/...`).
+- Добавлены scanner-trap location (например `wp-admin`, `xmlrpc.php`, `.env`) с ответом `444`.
+- Добавлены шаблоны Fail2Ban:
+	- фильтр brute-force для auth,
+	- фильтр scanner/probe запросов,
+	- готовый `jail.local.example` под Linux-host.
+
+### Результат проверки на сервере
+
+- Fail2Ban сервис успешно стартует на Ubuntu 24.04 (`active/running`).
+- Jail'ы активны: `nginx-auth-bruteforce`, `nginx-scanners`, `sshd`.
+- `nginx-scanners` подтвержден реальным матчингом через `fail2ban-regex`.
+- `nginx-auth-bruteforce` настроен на `access.log`; для подтверждения бана требуется серия неудачных логинов (401/403/429).
