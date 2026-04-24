@@ -27,9 +27,14 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'volt-env-file', variable: 'ENV_FILE')]) {
                     sh 'cp $ENV_FILE .env'
-                    sh 'docker-compose -p volt down --remove-orphans || true'
+                    sh '''
+                        for name in volt-node-exporter volt-redis volt-postgres volt-backend volt-frontend volt-nginx volt-certbot volt-prometheus volt-grafana volt-jenkins; do
+                            docker stop $name 2>/dev/null || true
+                            docker rm $name 2>/dev/null || true
+                        done
+                    '''
                     sh 'docker-compose -p volt --profile prod up -d --build'
-                    sh 'sleep 15'
+                    sh 'sleep 20'
                     sh 'docker-compose -p volt exec -T backend npx prisma migrate deploy || true'
                     sh 'docker-compose -p volt ps'
                 }
