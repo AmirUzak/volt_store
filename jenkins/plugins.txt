@@ -1,0 +1,9 @@
+git:latest
+workflow-aggregator:latest
+docker-workflow:latest
+credentials-binding:latest
+timestamper:latest
+ansicolor:latest
+build-timeout:latest
+github:latest
+ssh-agent:latest

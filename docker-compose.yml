@@ -147,9 +147,29 @@ services:
     depends_on:
       - prometheus
 
+  # Jenkins CI/CD - Docker-in-Docker via socket for pipeline builds
+  jenkins:
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    container_name: volt-jenkins
+    restart: unless-stopped
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+    environment:
+      - CASC_JENKINS_CONFIG=/var/jenkins_home/casc.yaml
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+
 volumes:
   postgres_data:
   letsencrypt:
   certbot_webroot:
   prometheus_data:
   grafana_data:
+  jenkins_data:

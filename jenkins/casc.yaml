@@ -1,0 +1,26 @@
+# Jenkins Configuration as Code (JCasC)
+# Automatically configures Jenkins without manual UI setup
+
+jenkins:
+  systemMessage: "VOLT Store CI/CD — автоматическая конфигурация"
+  numExecutors: 2
+  scmCheckoutRetryCount: 2
+  mode: NORMAL
+  remotingSecurity:
+    enabled: true
+
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+  scriptApproval:
+    autoApprove: true
+
+unclassified:
+  location:
+    url: http://localhost:8080/
+    adminAddress: "admin@voltstore.app"
+
+# Credentials configuration (if needed, can be expanded)
+credentials:
+  system:
+    domainCredentials: []
