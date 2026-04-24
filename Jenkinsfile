@@ -23,24 +23,15 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build & Deploy') {
             steps {
                 withCredentials([file(credentialsId: 'volt-env-file', variable: 'ENV_FILE')]) {
                     sh 'cp $ENV_FILE .env'
-                    sh 'docker-compose build'
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                withCredentials([file(credentialsId: 'volt-env-file', variable: 'ENV_FILE')]) {
-                    sh 'cp $ENV_FILE /root/volt_store/.env'
-                    sh 'cd /root/volt_store && docker-compose --profile prod down --remove-orphans || true'
-                    sh 'cd /root/volt_store && docker-compose --profile prod up -d --build'
+                    sh 'docker-compose -p volt down --remove-orphans || true'
+                    sh 'docker-compose -p volt --profile prod up -d --build'
                     sh 'sleep 15'
-                    sh 'cd /root/volt_store && docker-compose exec -T backend npx prisma migrate deploy || true'
-                    sh 'cd /root/volt_store && docker-compose ps'
+                    sh 'docker-compose -p volt exec -T backend npx prisma migrate deploy || true'
+                    sh 'docker-compose -p volt ps'
                 }
             }
         }
@@ -48,11 +39,11 @@ pipeline {
 
     post {
         always {
-            sh 'cd /root/volt_store && docker-compose ps || true'
+            sh 'docker-compose -p volt ps || true'
         }
         failure {
-            sh 'cd /root/volt_store && docker-compose logs > /tmp/build-logs.txt 2>&1 || true'
-            archiveArtifacts artifacts: '/tmp/build-logs.txt', allowEmptyArchive: true
+            sh 'docker-compose -p volt logs > build-logs.txt 2>&1 || true'
+            archiveArtifacts artifacts: 'build-logs.txt', allowEmptyArchive: true
         }
     }
 }
