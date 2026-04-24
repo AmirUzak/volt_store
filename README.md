@@ -77,3 +77,19 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 ```bash
 docker compose --profile prod up -d --build
 ```
+
+## Security hardening (Fail2Ban + Nginx)
+
+- Nginx now writes security-focused logs to host-mounted files:
+	- `logs/nginx/access.log`
+	- `logs/nginx/auth_access.log`
+	- `logs/nginx/scanners_access.log`
+- Auth endpoints are rate-limited at Nginx level.
+- Scanner probes are dropped with status `444` and logged separately.
+
+Fail2Ban templates are in:
+
+- `security/fail2ban/filter.d/nginx-auth-bruteforce.conf`
+- `security/fail2ban/filter.d/nginx-scanners.conf`
+- `security/fail2ban/jail.local.example`
+- `security/fail2ban/README.md`

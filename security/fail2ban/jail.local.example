@@ -1,0 +1,29 @@
+[DEFAULT]
+# Adjust to your host network, VPN ranges, and office IPs.
+ignoreip = 127.0.0.1/8 ::1
+
+# Ban policy
+findtime = 10m
+bantime = 1h
+maxretry = 10
+
+# Use the action available on your host.
+banaction = iptables-multiport
+
+[nginx-auth-bruteforce]
+enabled = true
+port = http,https
+filter = nginx-auth-bruteforce
+logpath = /opt/volt_store/logs/nginx/auth_access.log
+findtime = 10m
+maxretry = 8
+bantime = 1h
+
+[nginx-scanners]
+enabled = true
+port = http,https
+filter = nginx-scanners
+logpath = /opt/volt_store/logs/nginx/scanners_access.log
+findtime = 10m
+maxretry = 5
+bantime = 24h

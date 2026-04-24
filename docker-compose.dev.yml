@@ -12,6 +12,7 @@ services:
       - "80:80"
     volumes:
       - ./nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./logs/nginx-dev:/var/log/nginx
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/health"]
       interval: 10s
