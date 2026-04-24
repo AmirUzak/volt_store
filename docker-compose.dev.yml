@@ -2,6 +2,8 @@ services:
   nginx-dev:
     image: nginx:alpine
     container_name: volt-nginx-dev
+    profiles:
+      - dev
     restart: unless-stopped
     depends_on:
       - frontend
