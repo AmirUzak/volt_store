@@ -14,8 +14,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-volt_db}
       POSTGRES_USER: ${POSTGRES_USER:-volt_app}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -80,6 +78,8 @@ services:
       context: .
       dockerfile: nginx.Dockerfile
     container_name: volt-nginx
+    profiles:
+      - prod
     restart: unless-stopped
     depends_on:
       - frontend
@@ -100,13 +100,56 @@ services:
   certbot:
     image: certbot/certbot:latest
     container_name: volt-certbot
+    profiles:
+      - prod
     restart: unless-stopped
     volumes:
       - letsencrypt:/etc/letsencrypt
       - certbot_webroot:/var/www/certbot
     entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done"
 
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    container_name: volt-node-exporter
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: volt-prometheus
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - backend
+      - node-exporter
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: volt-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-change_me}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+
 volumes:
   postgres_data:
   letsencrypt:
   certbot_webroot:
+  prometheus_data:
+  grafana_data:

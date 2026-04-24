@@ -63,3 +63,17 @@ docker compose -p volt exec frontend node -e "const p=require('./lib/data/produc
 
 - После миграции API возвращает полный каталог: `count=43`.
 - В API-ответах доступны новые поля: `slug`, `rating`, `images`, `specs`, `stock`.
+
+## Docker modes
+
+Локальная разработка без SSL:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+```
+
+Продакшен с SSL и certbot:
+
+```bash
+docker compose --profile prod up -d --build
+```
