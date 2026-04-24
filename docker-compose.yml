@@ -160,9 +160,9 @@ services:
     volumes:
       - jenkins_data:/var/jenkins_home
       # Host project mount so Jenkins container can run git/docker compose in /root/volt_store
-      - /root/volt_store:/root/volt_store
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
+      - /root/volt_store:/root/volt_store
     environment:
       - CASC_JENKINS_CONFIG=/var/jenkins_home/casc.yaml
       - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
