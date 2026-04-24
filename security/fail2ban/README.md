@@ -38,6 +38,7 @@ sudo cp /opt/volt_store/security/fail2ban/jail.local.example /etc/fail2ban/jail.
 Edit `/etc/fail2ban/jail.local`:
 - set `ignoreip` (office/VPN ranges)
 - set correct `logpath` to the repository `logs/nginx/*.log`
+- keep `backend = polling` for these jails so Fail2Ban reads the Docker-mounted files, not journald
 - optionally switch `banaction` to `nftables-multiport` if needed
 
 ## Start and verify
@@ -51,6 +52,8 @@ sudo fail2ban-client status nginx-scanners
 ```
 
 ## Optional filter testing
+
+Replace `/opt/volt_store` with the real absolute path on your Linux host.
 
 ```bash
 sudo fail2ban-regex /opt/volt_store/logs/nginx/auth_access.log /etc/fail2ban/filter.d/nginx-auth-bruteforce.conf

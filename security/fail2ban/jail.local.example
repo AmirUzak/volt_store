@@ -12,6 +12,7 @@ banaction = iptables-multiport
 
 [nginx-auth-bruteforce]
 enabled = true
+backend = polling
 port = http,https
 filter = nginx-auth-bruteforce
 logpath = /opt/volt_store/logs/nginx/auth_access.log
@@ -21,6 +22,7 @@ bantime = 1h
 
 [nginx-scanners]
 enabled = true
+backend = polling
 port = http,https
 filter = nginx-scanners
 logpath = /opt/volt_store/logs/nginx/scanners_access.log
