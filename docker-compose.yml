@@ -167,6 +167,19 @@ services:
       - CASC_JENKINS_CONFIG=/var/jenkins_home/casc.yaml
       - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: volt-cadvisor
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - "8081:8080"
+
 volumes:
   postgres_data:
   letsencrypt:
