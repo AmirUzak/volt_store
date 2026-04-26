@@ -23,8 +23,8 @@
 | Локация | Frankfurt (FRA1) |
 | ОС | Ubuntu 24.04 LTS x64 |
 | vCPU | 1 |
-| RAM | 1 GB |
-| Диск | 25 GB SSD |
+| RAM | 2 GB |
+| Диск | 50 GB SSD |
 
 ## Быстрый старт
 
