@@ -9,6 +9,8 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: volt-postgres
+    ports:
+      - "5432:5432"
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-volt_db}
@@ -167,19 +169,6 @@ services:
     environment:
       - CASC_JENKINS_CONFIG=/var/jenkins_home/casc.yaml
       - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
-
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: volt-cadvisor
-    restart: unless-stopped
-    privileged: true
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    ports:
-      - "8081:8080"
 
 volumes:
   postgres_data:
