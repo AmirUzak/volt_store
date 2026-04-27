@@ -156,6 +156,7 @@ services:
       dockerfile: Dockerfile
     container_name: volt-jenkins
     restart: unless-stopped
+    mem_limit: 512m
     user: root
     ports:
       - "8080:8080"
